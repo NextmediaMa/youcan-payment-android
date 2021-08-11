@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.canshipy.youcanpaymentandroidsdk.instrafaces.TokenizationCallBack;
-import com.canshipy.youcanpaymentandroid.models.Token;
+import com.canshipy.youcanpaymentandroidsdk.models.Token;
 
 import org.json.JSONObject;
 
