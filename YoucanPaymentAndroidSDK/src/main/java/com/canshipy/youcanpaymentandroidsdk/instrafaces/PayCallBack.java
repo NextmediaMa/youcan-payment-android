@@ -1,7 +1,8 @@
 package com.canshipy.youcanpaymentandroidsdk.instrafaces;
 
+import com.canshipy.youcanpaymentandroidsdk.models.Result;
+
 public interface PayCallBack {
-    void onPaySuccess(String response);
-    void onPaySuccessWith3DS(String response);
+    void onPaySuccess(Result result);
     void onPayField(String response);
 }

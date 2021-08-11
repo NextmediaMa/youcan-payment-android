@@ -1,8 +1,10 @@
 package com.canshipy.youcanpaymentandroidsdk.task;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.canshipy.youcanpaymentandroidsdk.instrafaces.PayCallBack;
+import com.canshipy.youcanpaymentandroidsdk.models.Result;
 
 import org.json.JSONObject;
 
@@ -34,13 +36,30 @@ public class PayTask extends AsyncTask<String, Void, String> {
                 .build();
         Response response;
         JSONObject result;
+
         try {
             response = okHttpClient.newCall(request).execute();
             result = new JSONObject(response.body().string());
-            onResultListener.onPaySuccess(result.toString());
+            Result resultObject = new Result().resultFromJson(result.toString());
+            Log.e("build_test",  resultObject.toString());
+
+            if(!resultObject.paReq.equals("")) {
+                onResultListener.onPayField("payment with 3DS");
+
+                return null;
+            }
+
+            if(resultObject.success) {
+                onResultListener.onPaySuccess(resultObject);
+            } else {
+                onResultListener.onPayField(resultObject.message);
+            }
+
             return null;
+
         } catch (Exception e) {
             e.printStackTrace();
+            onResultListener.onPayField("error has occurred");
         }
         return null;
     }

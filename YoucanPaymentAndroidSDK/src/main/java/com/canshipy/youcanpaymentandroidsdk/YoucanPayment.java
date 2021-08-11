@@ -1,21 +1,23 @@
 package com.canshipy.youcanpaymentandroidsdk;
 
 
+import android.util.Log;
+
 import com.canshipy.youcanpaymentandroidsdk.instrafaces.PayCallBack;
 import com.canshipy.youcanpaymentandroidsdk.instrafaces.TokenizationCallBack;
 import com.canshipy.youcanpaymentandroidsdk.models.Initilaze;
 import com.canshipy.youcanpaymentandroidsdk.models.Pay;
+import com.canshipy.youcanpaymentandroidsdk.models.Result;
 import com.canshipy.youcanpaymentandroidsdk.models.Token;
 
 public class YoucanPayment implements TokenizationCallBack, PayCallBack {
 
-    Token token;
     public Initilaze initilaze = new Initilaze(this);
     public Pay pay = new Pay();
 
     @Override
     public void onResponse(Token token) {
-        this.token = token;
+        Log.e("build_test", token.toString() );
         this.pay.setToken(token);
     }
 
@@ -24,14 +26,8 @@ public class YoucanPayment implements TokenizationCallBack, PayCallBack {
 
     }
 
-
     @Override
-    public void onPaySuccess(String response) {
-
-    }
-
-    @Override
-    public void onPaySuccessWith3DS(String response) {
+    public void onPaySuccess(Result response) {
 
     }
 

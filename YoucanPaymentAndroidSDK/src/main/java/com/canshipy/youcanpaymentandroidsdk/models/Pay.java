@@ -10,9 +10,9 @@ import static com.canshipy.youcanpaymentandroidsdk.config.Config.URL_PAY;
 
 public class Pay {
 
-    String payUrl= URL_PAY;
-    public CardInformation cardInformation;
-    public Token token;
+    String payUrl = URL_PAY;
+    CardInformation cardInformation;
+    Token token;
 
     public Pay(){
     }
@@ -31,7 +31,6 @@ public class Pay {
         this.token = token;
         return this;
     }
-
 
     public void call(PayCallBack payCallBack){
         RequestBody form = new FormBody.Builder()
