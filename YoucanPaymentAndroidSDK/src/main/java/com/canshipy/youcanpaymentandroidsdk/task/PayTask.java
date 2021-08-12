@@ -43,8 +43,9 @@ public class PayTask extends AsyncTask<String, Void, String> {
             Result resultObject = new Result().resultFromJson(result.toString());
             Log.e("build_test",  resultObject.toString());
 
-            if(!resultObject.paReq.equals("")) {
-                onResultListener.onPayField("payment with 3DS");
+            if(!result.has("success")) {
+                resultObject.is3DS = true;
+                onResultListener.onPayFailure("payment with 3DS");
 
                 return null;
             }
@@ -52,14 +53,14 @@ public class PayTask extends AsyncTask<String, Void, String> {
             if(resultObject.success) {
                 onResultListener.onPaySuccess(resultObject);
             } else {
-                onResultListener.onPayField(resultObject.message);
+                onResultListener.onPayFailure(resultObject.message);
             }
 
             return null;
 
         } catch (Exception e) {
             e.printStackTrace();
-            onResultListener.onPayField("error has occurred");
+            onResultListener.onPayFailure("error has occurred");
         }
         return null;
     }
