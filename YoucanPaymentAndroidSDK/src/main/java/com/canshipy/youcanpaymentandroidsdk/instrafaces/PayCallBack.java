@@ -4,5 +4,5 @@ import com.canshipy.youcanpaymentandroidsdk.models.Result;
 
 public interface PayCallBack {
     void onPaySuccess(Result result);
-    void onPayField(String response);
+    void onPayFailure(String response);
 }
