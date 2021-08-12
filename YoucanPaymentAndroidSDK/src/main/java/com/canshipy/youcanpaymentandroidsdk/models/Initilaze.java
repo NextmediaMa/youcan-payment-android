@@ -13,51 +13,61 @@ public class Initilaze {
     String tokenizationUrl = URL_TOKENIZATION;
     String currency = CURRENCY;
     String accountId = ACCOUNT_ID;
+    String pubKey = PUB_KEY;
     String orderId = ORDER_ID;
     double amount = 0;
     TokenizationCallBack listener;
 
-    public Initilaze(TokenizationCallBack listener){
+    public Initilaze(TokenizationCallBack listener) {
         this.listener = listener;
     }
 
-    public Initilaze setTokenUrl(String url){
+    public Initilaze setTokenUrl(String url) {
         this.tokenizationUrl = url;
+
         return this;
     }
 
-    public Initilaze setAccountId(String accountId){
+    public Initilaze setAccountId(String accountId) {
         this.accountId = accountId;
+
         return this;
     }
 
-    public Initilaze setCurrency(String currency){
+    public Initilaze setCurrency(String currency) {
         this.currency = currency;
+
         return this;
     }
 
-    public Initilaze setAmount(double amount){
+    public Initilaze setAmount(double amount) {
         this.amount = amount;
+
         return this;
     }
 
-    public Initilaze setOrderId(String orderId){
+    public Initilaze setOrderId(String orderId) {
         this.orderId = orderId;
+
         return this;
     }
 
-    public void call(){
+    public Initilaze setPublicKey(String pubKey) {
+        this.pubKey = pubKey;
 
+        return this;
+    }
+
+    public void call() {
         RequestBody form = new FormBody.Builder()
-                .add("account_id", accountId)
-                .add("currency", currency)
                 .add("amount", amount+"")
+                .add("currency", currency)
+                .add("pub_key", pubKey)
                 .add("order_id", orderId)
                 .build();
 
         new TokenizationTask(this.tokenizationUrl,form, listener).execute("");
     }
-
 
     @Override
     public String toString() {

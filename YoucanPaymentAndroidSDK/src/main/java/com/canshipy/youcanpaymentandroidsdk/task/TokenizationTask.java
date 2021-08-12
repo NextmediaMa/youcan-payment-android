@@ -41,10 +41,23 @@ public class TokenizationTask extends AsyncTask<String, Void, String> {
         try {
             response = okHttpClient.newCall(request).execute();
             result = new JSONObject(response.body().string());
+            Log.e("build_test", result.toString() );
+
+            if(result.has("success")) {
+                onResultListener.onError(result.getString("message"));
+
+                return  null;
+            }
+
             Token token = new Token().tokenFromJson(result.getJSONObject("token").toString());
+
             onResultListener.onResponse(token);
+            return  null;
+
         } catch (Exception e) {
             e.printStackTrace();
+            onResultListener.onError("error has occurred");
+
         }
         return null;
     }
