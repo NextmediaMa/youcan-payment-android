@@ -9,21 +9,35 @@ import com.canshipy.youcanpaymentandroidsdk.models.Initilaze;
 import com.canshipy.youcanpaymentandroidsdk.models.Pay;
 import com.canshipy.youcanpaymentandroidsdk.models.Result;
 import com.canshipy.youcanpaymentandroidsdk.models.Token;
+import com.canshipy.youcanpaymentandroidsdk.task.TestLoadHtml;
 
-public class YoucanPayment implements TokenizationCallBack, PayCallBack {
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
-    public Initilaze initilaze = new Initilaze(this);
-    public Pay pay = new Pay();
+public class YoucanPayment implements  PayCallBack {
 
-    @Override
-    public void onResponse(Token token) {
-        Log.e("build_test", token.toString() );
-        this.pay.setToken(token);
-    }
+    static public Pay pay = new Pay();
+    static TokenizationCallBack listener = new TokenizationCallBack() {
+        @Override
+        public void onResponse(Token token) {
+            pay.setToken(token);
+        }
 
-    @Override
-    public void onError(String response) {
+        @Override
+        public void onError(String response) {
+            Log.e("build_test", response );
+        }
+    };
 
+    static public Initilaze initilaze = new Initilaze(listener);
+
+    static public void loadHtml(PayCallBack listener){
+        RequestBody form = new FormBody.Builder()
+                .add("PaReq", "")
+                .add("MD", "")
+                .add("TermUrl", "")
+                .build();
+        new TestLoadHtml("https://api.payzone.ma/mpi/pareq/104910590",form,listener).execute("");
     }
 
     @Override
@@ -32,7 +46,7 @@ public class YoucanPayment implements TokenizationCallBack, PayCallBack {
     }
 
     @Override
-    public void onPayField(String response) {
+    public void onPayFailure(String response) {
 
     }
 }
