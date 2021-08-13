@@ -9,44 +9,39 @@ import com.canshipy.youcanpaymentandroidsdk.models.Initilaze;
 import com.canshipy.youcanpaymentandroidsdk.models.Pay;
 import com.canshipy.youcanpaymentandroidsdk.models.Result;
 import com.canshipy.youcanpaymentandroidsdk.models.Token;
-import com.canshipy.youcanpaymentandroidsdk.task.TestLoadHtml;
+import com.canshipy.youcanpaymentandroidsdk.task.Load3DSPage;
 
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
-public class YoucanPayment implements  PayCallBack {
+public class YoucanPayment {
 
     static public Pay pay = new Pay();
+    static public PayCallBack payListener;
     static TokenizationCallBack listener = new TokenizationCallBack() {
         @Override
         public void onResponse(Token token) {
+            if(token!=null)
             pay.setToken(token);
         }
 
         @Override
         public void onError(String response) {
-            Log.e("build_test", response );
+            payListener.onPayFailure(response);
         }
     };
 
     static public Initilaze initilaze = new Initilaze(listener);
 
-    static public void loadHtml(PayCallBack listener){
+    static public void load3DsPage(Result result){
+        Log.e("build_test", "load3DsPage: " );
         RequestBody form = new FormBody.Builder()
-                .add("PaReq", "")
-                .add("MD", "")
-                .add("TermUrl", "")
+                .add("PaReq", result.paReq)
+                .add("MD", result.transactionId)
+                .add("TermUrl", result.callBackUrl)
                 .build();
-        new TestLoadHtml("https://api.payzone.ma/mpi/pareq/104910590",form,listener).execute("");
+        new Load3DSPage(result.redirectUrl,result.listenUrl,form).execute("");
     }
 
-    @Override
-    public void onPaySuccess(Result response) {
 
-    }
-
-    @Override
-    public void onPayFailure(String response) {
-
-    }
 }

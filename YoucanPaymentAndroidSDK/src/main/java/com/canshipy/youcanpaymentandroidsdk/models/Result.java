@@ -13,7 +13,12 @@ public class Result {
     public String paReq = "";
     @SerializedName("transaction_id")
     public String transactionId = "";
+    @SerializedName("return_url")
     public String callBackUrl = "";
+    @SerializedName("redirect_url")
+    public String redirectUrl = "";
+    @SerializedName("listen_url")
+    public String listenUrl = "";
     public boolean callBackInvoked = false;
 
     public Result() {
@@ -28,15 +33,18 @@ public class Result {
         this.callBackInvoked = callBackInvoked;
     }
 
-    public Result resultFromJson(String json){
+    public Result resultFromJson(String json) {
+
         Gson gson = new Gson();
         Result result;
+
         try {
             result = gson.fromJson(json, Result.class);
         } catch (Exception e){
             e.printStackTrace();
             result = new Result();
         }
+
         return result;
     }
 
@@ -47,8 +55,11 @@ public class Result {
                 ", message='" + message + '\'' +
                 ", is3DS=" + is3DS +
                 ", threeDsPage='" + threeDsPage + '\'' +
+                ", paReq='" + paReq + '\'' +
                 ", transactionId='" + transactionId + '\'' +
                 ", callBackUrl='" + callBackUrl + '\'' +
+                ", redirectUrl='" + redirectUrl + '\'' +
+                ", listenUrl='" + listenUrl + '\'' +
                 ", callBackInvoked=" + callBackInvoked +
                 '}';
     }

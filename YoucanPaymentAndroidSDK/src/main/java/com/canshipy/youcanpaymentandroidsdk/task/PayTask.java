@@ -3,6 +3,7 @@ package com.canshipy.youcanpaymentandroidsdk.task;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.canshipy.youcanpaymentandroidsdk.YoucanPayment;
 import com.canshipy.youcanpaymentandroidsdk.instrafaces.PayCallBack;
 import com.canshipy.youcanpaymentandroidsdk.models.Result;
 
@@ -13,7 +14,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class PayTask extends AsyncTask<String, Void, String> {
+public class PayTask extends AsyncTask<String, Void, Result> {
 
     String url;
     RequestBody formBody;
@@ -26,7 +27,7 @@ public class PayTask extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected Result doInBackground(String... strings) {
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
@@ -45,24 +46,35 @@ public class PayTask extends AsyncTask<String, Void, String> {
 
             if(!result.has("success")) {
                 resultObject.is3DS = true;
-                onResultListener.onPayFailure("payment with 3DS");
-
-                return null;
+                YoucanPayment.load3DsPage(resultObject);
             }
 
-            if(resultObject.success) {
-                onResultListener.onPaySuccess(resultObject);
-            } else {
-                onResultListener.onPayFailure(resultObject.message);
-            }
-
-            return null;
-
+            return resultObject;
         } catch (Exception e) {
             e.printStackTrace();
-            onResultListener.onPayFailure("error has occurred");
+            Result resultObject = new Result();
+            resultObject.message = "error has occurred";
+            resultObject.success =false;
+
+            return resultObject;
+
         }
-        return null;
     }
 
+    @Override
+    protected void onPostExecute(Result result) {
+        super.onPostExecute(result);
+
+        if(result.is3DS ) {
+            YoucanPayment.load3DsPage(result);
+            return;
+        }
+
+        if(result.success) {
+            YoucanPayment.payListener.onPaySuccess(result);
+        } else {
+            YoucanPayment.payListener.onPayFailure(result.message);
+        }
+
+    }
 }
