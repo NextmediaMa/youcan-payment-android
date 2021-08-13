@@ -1,5 +1,8 @@
 package com.canshipy.youcanpaymentandroidsdk.models;
 
+import android.util.Log;
+
+import com.canshipy.youcanpaymentandroidsdk.YoucanPayment;
 import com.canshipy.youcanpaymentandroidsdk.instrafaces.PayCallBack;
 import com.canshipy.youcanpaymentandroidsdk.task.PayTask;
 
@@ -32,8 +35,18 @@ public class Pay {
         return this;
     }
 
-    public void call(PayCallBack payCallBack){
-        RequestBody form = new FormBody.Builder()
+    public void call(){
+        if(token==null) {
+            Log.e("result", "Token: Token is null");
+            return;
+        }
+
+        if(YoucanPayment.payListener == null) {
+            Log.e("result", "call: listener null");
+            return;
+        }
+
+         RequestBody form = new FormBody.Builder()
                 .add("card_holder_name", this.cardInformation.cardHolderName)
                 .add("cvv", this.cardInformation.cvv)
                 .add("credit_card", this.cardInformation.cardNumber)
@@ -42,6 +55,6 @@ public class Pay {
                 .add("is_mobile", "1")
                 .build();
 
-        new PayTask(this.payUrl,form,payCallBack).execute("");
+        new PayTask(this.payUrl,form, YoucanPayment.payListener).execute("");
     }
 }
