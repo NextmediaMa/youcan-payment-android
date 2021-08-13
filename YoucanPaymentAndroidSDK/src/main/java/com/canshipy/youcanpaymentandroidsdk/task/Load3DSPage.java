@@ -1,32 +1,29 @@
 package com.canshipy.youcanpaymentandroidsdk.task;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.canshipy.youcanpaymentandroidsdk.instrafaces.PayCallBack;
+import com.canshipy.youcanpaymentandroidsdk.YoucanPayment;
 import com.canshipy.youcanpaymentandroidsdk.models.Result;
-
-import org.json.JSONObject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class TestLoadHtml extends AsyncTask<String, Void, String> {
+public class Load3DSPage extends AsyncTask<String, Void, Result> {
 
     String url;
+    String listenerUrl;
     RequestBody formBody;
-    PayCallBack onResultListener;
 
-    public TestLoadHtml(String url, RequestBody formBody, PayCallBack listener) {
+    public Load3DSPage(String url,String callback, RequestBody formBody) {
         this.url = url;
         this.formBody = formBody;
-        this.onResultListener = listener;
+        this.listenerUrl = callback ;
     }
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected Result doInBackground(String... strings) {
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
@@ -35,22 +32,30 @@ public class TestLoadHtml extends AsyncTask<String, Void, String> {
                 .post(formBody)
                 .build();
         Response response;
-        JSONObject result;
+        Result result = new Result();
 
         try {
             response = okHttpClient.newCall(request).execute();
-            return response.body().string();
+            result.success = true;
+            result.threeDsPage = response.body().string();
+            result.listenUrl = listenerUrl;
         } catch (Exception e) {
             e.printStackTrace();
-            onResultListener.onPayFailure("error has occurred");
+            result.message = "Load3DSPage :error has occurred";
         }
-        return null;
+
+        return  result;
+
     }
 
     @Override
-    protected void onPostExecute(String response) {
+    protected void onPostExecute(Result response) {
         super.onPostExecute(response);
-        onResultListener.onPayFailure(response);
+
+        if(response.success)
+             YoucanPayment.payListener.on3DsResult(response);
+        else
+            YoucanPayment.payListener.onPayFailure(response.message);
 
     }
 }
