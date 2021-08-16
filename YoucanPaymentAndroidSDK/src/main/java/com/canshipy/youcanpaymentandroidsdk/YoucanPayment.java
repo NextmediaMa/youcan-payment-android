@@ -22,7 +22,7 @@ public class YoucanPayment {
         @Override
         public void onResponse(Token token) {
             if(token!=null)
-            pay.setToken(token);
+                pay.setToken(token);
         }
 
         @Override
@@ -33,13 +33,13 @@ public class YoucanPayment {
 
     static public Initilaze initilaze = new Initilaze(listener);
 
-    static public void load3DsPage(Result result){
-        Log.e("build_test", "load3DsPage: " );
+    static public void load3DsPage(Result result) {
         RequestBody form = new FormBody.Builder()
                 .add("PaReq", result.paReq)
                 .add("MD", result.transactionId)
                 .add("TermUrl", result.callBackUrl)
                 .build();
+
         new Load3DSPage(result.redirectUrl,result.listenUrl,form).execute("");
     }
 

@@ -15,6 +15,7 @@ import com.canshipy.youcanpaymentandroidsdk.models.Result;
 public class YoucanPayWebView extends WebView {
 
     private String listenerUrl;
+
     public YoucanPayWebView(@NonNull Context context) {
         super(context);
     }
@@ -28,28 +29,27 @@ public class YoucanPayWebView extends WebView {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
+
                 return true;
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                Log.e("url_onPageFinished", "onPageFinished: "+url );
-                Log.e("url_onPageFinished", "listener : "+listenerUrl );
 
                     try {
-                        if(checkPayIsSuccess(url))
-                            return;
-
                         if (url.contains("is_success=0")) {
                             YoucanPayment.payListener.onPayFailure("3Ds not Success");
 
                             return;
                         }
 
-                        YoucanPayment.payListener.onPayFailure("3Ds View Page: error has occurred");
+                        if (url.contains("is_success=1")) {
+                            YoucanPayment.payListener.onPaySuccess(new Result());
+
+                            return;
+                        }
 
                         return;
-
                     } catch (Exception exception) {
                         exception.printStackTrace();
                         YoucanPayment.payListener.onPayFailure("3Ds View Page: error has occurred");
@@ -69,14 +69,4 @@ public class YoucanPayWebView extends WebView {
         this.loadDataWithBaseURL("",result.threeDsPage,"text/html","utf-8",null);
     }
 
-    private boolean checkPayIsSuccess(String url){
-        if(!url.contains(listenerUrl))
-            return  false;
-        if (url.contains("is_success=1")) {
-                YoucanPayment.payListener.onPaySuccess(new Result());
-                return  true;
-        }
-
-        return  false;
-    }
 }
