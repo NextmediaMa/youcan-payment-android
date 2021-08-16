@@ -17,40 +17,50 @@ public class Pay {
     CardInformation cardInformation;
     Token token;
 
-    public Pay(){
-    }
+    public Pay(){}
 
-    public Pay setCardInformation(CardInformation cardInformation){
+    public Pay setCardInformation(CardInformation cardInformation) {
         this.cardInformation = cardInformation;
+
         return this;
     }
 
-    public Pay setPayUrl(String payUrl){
+    public Pay setPayUrl(String payUrl) {
         this.payUrl = payUrl;
+
         return this;
     }
 
-    public Pay setToken(Token token){
+    public Pay setToken(Token token) {
         this.token = token;
+
         return this;
     }
 
-    public void call(){
-        if(token==null) {
+    public Pay setListener(PayCallBack payListener) {
+        YoucanPayment.payListener = payListener;
+
+        return this;
+    }
+
+    public void call() {
+        if(token == null) {
             Log.e("result", "Token: Token is null");
+
             return;
         }
 
         if(YoucanPayment.payListener == null) {
             Log.e("result", "call: listener null");
+
             return;
         }
 
          RequestBody form = new FormBody.Builder()
-                .add("card_holder_name", this.cardInformation.cardHolderName)
-                .add("cvv", this.cardInformation.cvv)
-                .add("credit_card", this.cardInformation.cardNumber)
-                .add("expire_date", this.cardInformation.expireDate)
+                .add("card_holder_name", this.cardInformation.getCardHolderName())
+                .add("cvv", this.cardInformation.getCvv())
+                .add("credit_card", this.cardInformation.getCardNumber())
+                .add("expire_date", this.cardInformation.getExpireDate())
                 .add("token_id", token.id)
                 .add("is_mobile", "1")
                 .build();
