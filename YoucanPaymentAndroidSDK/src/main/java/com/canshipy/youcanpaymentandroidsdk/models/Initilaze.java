@@ -1,9 +1,6 @@
 package com.canshipy.youcanpaymentandroidsdk.models;
 
-import android.util.Log;
 
-import com.canshipy.youcanpaymentandroidsdk.YoucanPayment;
-import com.canshipy.youcanpaymentandroidsdk.instrafaces.PayCallBack;
 import com.canshipy.youcanpaymentandroidsdk.instrafaces.TokenizationCallBack;
 import com.canshipy.youcanpaymentandroidsdk.task.TokenizationTask;
 
@@ -14,13 +11,13 @@ import static com.canshipy.youcanpaymentandroidsdk.config.Config.*;
 
 public class Initilaze {
 
-    String tokenizationUrl = URL_TOKENIZATION;
-    String currency = CURRENCY;
-    String accountId = ACCOUNT_ID;
-    String pubKey = PUB_KEY;
-    String orderId = ORDER_ID;
-    double amount = 0;
-    TokenizationCallBack listener;
+    private String tokenizationUrl = URL_TOKENIZATION;
+    private String currency = CURRENCY;
+    private String accountId = ACCOUNT_ID;
+    private String pubKey = PUB_KEY;
+    private String orderId = ORDER_ID;
+    private double amount = 0;
+    private TokenizationCallBack listener;
 
     public Initilaze(TokenizationCallBack listener) {
         this.listener = listener;
@@ -38,11 +35,6 @@ public class Initilaze {
         return this;
     }
 
-    public Initilaze setListener(PayCallBack payListener) {
-        YoucanPayment.payListener = payListener;
-
-        return this;
-    }
 
     public Initilaze setCurrency(String currency) {
         this.currency = currency;
@@ -69,12 +61,6 @@ public class Initilaze {
     }
 
     public void call() {
-
-        if(YoucanPayment.payListener == null) {
-            Log.e("result", "call: listener null");
-            return;
-        }
-
         RequestBody form = new FormBody.Builder()
                 .add("amount", amount+"")
                 .add("currency", currency)
