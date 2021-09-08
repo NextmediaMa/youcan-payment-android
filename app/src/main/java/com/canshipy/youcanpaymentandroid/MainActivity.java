@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(
                 v->
                  YoucanPayment.pay
-                .setCardInformation(new CardInformation("abdelmjid","4111111111111111","10/24","000"))
+                .setCardInformation(new CardInformation("abdelmjid","4111111s111111111","10/24","000"))
                 .setListener(new PayCallBack() {
                     @Override
                     public void onPaySuccess(Result response) {

@@ -43,7 +43,11 @@ public class PayTask extends AsyncTask<String, Void, Result> {
             result = new JSONObject(response.body().string());
             Result resultObject = new Result().resultFromJson(result.toString());
             Log.e("build_test",  result.toString());
-
+            if(!response.isSuccessful()){
+                Result result1 = new Result();
+                result1.message = result.getString("message");
+                return result1;
+            }
             if(!result.has("success")) {
                 resultObject.is3DS = true;
              //   YoucanPayment.load3DsPage(resultObject);
