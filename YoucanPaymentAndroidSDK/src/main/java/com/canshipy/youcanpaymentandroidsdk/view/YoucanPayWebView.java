@@ -10,11 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.canshipy.youcanpaymentandroidsdk.YoucanPayment;
+import com.canshipy.youcanpaymentandroidsdk.instrafaces.WebViewCallBack;
 import com.canshipy.youcanpaymentandroidsdk.models.Result;
 
 public class YoucanPayWebView extends WebView {
 
     private String listenerUrl;
+
+    WebViewCallBack webViewListener;
+
+    public void setWebViewListener(WebViewCallBack webViewListener) {
+        this.webViewListener = webViewListener;
+    }
 
     public YoucanPayWebView(@NonNull Context context) {
         super(context);
@@ -25,7 +32,7 @@ public class YoucanPayWebView extends WebView {
         this.getSettings().setJavaScriptEnabled(true);
         this.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
-        this.setWebViewClient(new WebViewClient(){
+        this.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
@@ -35,28 +42,36 @@ public class YoucanPayWebView extends WebView {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                Log.e("build_test_1", url );
+                Log.e("build_test_1", url);
 
                 try {
-                        if (url.contains("is_success=0")) {
-                            YoucanPayment.payListener.onPayFailure("3Ds not Success");
-
-                            return;
+                    if (url.contains("is_success=0")) {
+                        YoucanPayment.payListener.onPayFailure("3Ds not Success");
+                        if (webViewListener != null) {
+                            webViewListener.onResult();
                         }
-
-                        if (url.contains("is_success=1")) {
-                            YoucanPayment.payListener.onPaySuccess(new Result());
-
-                            return;
-                        }
-
                         return;
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                        YoucanPayment.payListener.onPayFailure("3Ds View Page: error has occurred");
+                    }
+
+                    if (url.contains("is_success=1")) {
+                        YoucanPayment.payListener.onPaySuccess(new Result());
+                        if (webViewListener != null) {
+                            webViewListener.onResult();
+                        }
 
                         return;
                     }
+
+                    return;
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                    YoucanPayment.payListener.onPayFailure("3Ds View Page: error has occurred");
+                    if (webViewListener != null) {
+                        webViewListener.onResult();
+                    }
+
+                    return;
+                }
             }
         });
     }
@@ -67,7 +82,7 @@ public class YoucanPayWebView extends WebView {
 
     public void loadResult(Result result) {
         this.listenerUrl = result.listenUrl;
-        this.loadDataWithBaseURL("",result.threeDsPage,"text/html","utf-8",null);
+        this.loadDataWithBaseURL("", result.threeDsPage, "text/html", "utf-8", null);
     }
 
 }

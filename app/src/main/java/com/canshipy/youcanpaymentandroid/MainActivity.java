@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.canshipy.youcanpaymentandroidsdk.YoucanPayment;
 import com.canshipy.youcanpaymentandroidsdk.instrafaces.PayCallBack;
+import com.canshipy.youcanpaymentandroidsdk.instrafaces.WebViewCallBack;
 import com.canshipy.youcanpaymentandroidsdk.models.CardInformation;
 import com.canshipy.youcanpaymentandroidsdk.models.Result;
 import com.canshipy.youcanpaymentandroidsdk.models.Token;
@@ -27,11 +28,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button);
         webPaiment =  findViewById(R.id.webPaiment);
-        YoucanPayment.setTokenId("b83b165c-26f3-43bc-ad10-17697680917f");
+        webPaiment.setWebViewListener(() -> {
+            Toast.makeText(getApplicationContext(), "Web Vieww", Toast.LENGTH_LONG).show();
+
+        });
+        YoucanPayment.setTokenId("0ed85262-cbc7-42a7-915a-fa88dbabda97");
         button.setOnClickListener(
                 v->
                  YoucanPayment.pay
-                .setCardInformation(new CardInformation("abdelmjid","4111111s111111111","10/24","000"))
+                .setCardInformation(new CardInformation("abdelmjid","4111111111111111","10/24","000"))
                 .setListener(new PayCallBack() {
                     @Override
                     public void onPaySuccess(Result response) {
