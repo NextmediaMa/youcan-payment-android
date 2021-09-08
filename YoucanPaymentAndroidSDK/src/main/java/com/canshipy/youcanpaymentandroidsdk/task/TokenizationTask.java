@@ -46,6 +46,7 @@ public class TokenizationTask extends AsyncTask<String, Void, Result> {
 
             if(result.has("success")) {
                 objectResult.message = result.getString("message");
+
                 return  objectResult;
             }
 
@@ -54,13 +55,12 @@ public class TokenizationTask extends AsyncTask<String, Void, Result> {
             onResultListener.onResponse(token);
 
             return  objectResult;
-
         } catch (Exception e) {
             e.printStackTrace();
             objectResult.message = "Token: error has occurred";
         }
 
-        return null;
+        return new Result();
     }
 
     @Override

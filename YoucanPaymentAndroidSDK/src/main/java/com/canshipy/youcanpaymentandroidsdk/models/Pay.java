@@ -9,6 +9,7 @@ import com.canshipy.youcanpaymentandroidsdk.task.PayTask;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
+import static com.canshipy.youcanpaymentandroidsdk.config.Config.PUB_KEY;
 import static com.canshipy.youcanpaymentandroidsdk.config.Config.URL_PAY;
 
 public class Pay {
@@ -62,6 +63,7 @@ public class Pay {
                 .add("credit_card", this.cardInformation.getCardNumber())
                 .add("expire_date", this.cardInformation.getExpireDate())
                 .add("token_id", token.id)
+                .add("pub_key", PUB_KEY)
                 .add("is_mobile", "1")
                 .build();
 

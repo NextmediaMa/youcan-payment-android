@@ -35,8 +35,9 @@ public class YoucanPayWebView extends WebView {
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                Log.e("build_test_1", url );
 
-                    try {
+                try {
                         if (url.contains("is_success=0")) {
                             YoucanPayment.payListener.onPayFailure("3Ds not Success");
 

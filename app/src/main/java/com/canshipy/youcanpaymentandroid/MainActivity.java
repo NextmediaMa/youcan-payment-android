@@ -15,6 +15,7 @@ import com.canshipy.youcanpaymentandroidsdk.YoucanPayment;
 import com.canshipy.youcanpaymentandroidsdk.instrafaces.PayCallBack;
 import com.canshipy.youcanpaymentandroidsdk.models.CardInformation;
 import com.canshipy.youcanpaymentandroidsdk.models.Result;
+import com.canshipy.youcanpaymentandroidsdk.models.Token;
 import com.canshipy.youcanpaymentandroidsdk.view.YoucanPayWebView;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,9 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button);
         webPaiment =  findViewById(R.id.webPaiment);
-
-        YoucanPayment.initilaze.setAmount(11.9).call();
-
+        YoucanPayment.setTokenId("b83b165c-26f3-43bc-ad10-17697680917f");
         button.setOnClickListener(
                 v->
                  YoucanPayment.pay

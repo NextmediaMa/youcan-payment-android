@@ -42,11 +42,11 @@ public class PayTask extends AsyncTask<String, Void, Result> {
             response = okHttpClient.newCall(request).execute();
             result = new JSONObject(response.body().string());
             Result resultObject = new Result().resultFromJson(result.toString());
-            Log.e("build_test",  resultObject.toString());
+            Log.e("build_test",  result.toString());
 
             if(!result.has("success")) {
                 resultObject.is3DS = true;
-                YoucanPayment.load3DsPage(resultObject);
+             //   YoucanPayment.load3DsPage(resultObject);
             }
 
             return resultObject;
@@ -66,14 +66,14 @@ public class PayTask extends AsyncTask<String, Void, Result> {
         super.onPostExecute(result);
 
         if(result.is3DS ) {
-            YoucanPayment.load3DsPage(result);
+           YoucanPayment.load3DsPage(result);
             return;
         }
 
         if(result.success) {
-            YoucanPayment.payListener.onPaySuccess(result);
+          YoucanPayment.payListener.onPaySuccess(result);
         } else {
-            YoucanPayment.payListener.onPayFailure(result.message);
+          YoucanPayment.payListener.onPayFailure(result.message);
         }
 
     }

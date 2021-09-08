@@ -27,11 +27,15 @@ public class YoucanPayment {
 
         @Override
         public void onError(String response) {
-            payListener.onPayFailure(response);
+            Log.e("build_test", "onError: "+response );
         }
     };
 
-    static public Initilaze initilaze = new Initilaze(listener);
+    static public void setTokenId(String tokenId){
+        Token token = new Token();
+        token.setId(tokenId);
+        pay.setToken(token);
+    }
 
     static public void load3DsPage(Result result) {
         RequestBody form = new FormBody.Builder()
