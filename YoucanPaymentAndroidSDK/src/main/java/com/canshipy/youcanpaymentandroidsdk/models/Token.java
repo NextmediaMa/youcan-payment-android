@@ -51,6 +51,22 @@ public class Token {
         this.createdAt = createdAt;
     }
 
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
     @Override
     public String toString() {
         return "Token{" +
