@@ -10,16 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.youcan.payment.YCPay;
-import com.youcan.payment.instrafaces.YCPayWebViewCallBack;
+import com.youcan.payment.instrafaces.YCPayWebViewCallBackImpl;
 import com.youcan.payment.models.YCPayResult;
 
 public class YCPayWebView extends WebView {
 
     private String listenerUrl;
 
-    YCPayWebViewCallBack webViewListener;
+    YCPayWebViewCallBackImpl webViewListener;
 
-    public void setWebViewListener(YCPayWebViewCallBack webViewListener) {
+    public void setWebViewListener(YCPayWebViewCallBackImpl webViewListener) {
         this.webViewListener = webViewListener;
     }
 

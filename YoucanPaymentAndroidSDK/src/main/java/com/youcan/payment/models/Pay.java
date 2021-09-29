@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.youcan.payment.YCPay;
 import com.youcan.payment.config.Config;
-import com.youcan.payment.instrafaces.PayCallBack;
+import com.youcan.payment.instrafaces.PayCallBackImpl;
 import com.youcan.payment.task.PayTask;
 
 import okhttp3.FormBody;
@@ -37,7 +37,11 @@ public class Pay {
         return this;
     }
 
-    public Pay setListener(PayCallBack payListener) {
+    public YCPayToken getToken() {
+        return token;
+    }
+
+    public Pay setListener(PayCallBackImpl payListener) {
         YCPay.payListener = payListener;
 
         return this;

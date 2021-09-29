@@ -1,5 +1,5 @@
 package com.youcan.payment.instrafaces;
 
-public interface YCPayWebViewCallBack {
+public interface YCPayWebViewCallBackImpl {
     void onResult();
 }

@@ -3,7 +3,7 @@ package com.youcan.payment.task;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.youcan.payment.instrafaces.YCPayTokenizerCallBack;
+import com.youcan.payment.instrafaces.YCPayTokenizerCallBackImpl;
 import com.youcan.payment.models.YCPayResult;
 import com.youcan.payment.models.YCPayToken;
 import com.youcan.payment.models.YCPayTokenizerParams;
@@ -22,10 +22,10 @@ public class YCPayTokenizerTask extends AsyncTask<String, Void, YCPayResult> {
 
     YCPayTokenizerParams params;
     Request.Builder requestBuilder;
-    YCPayTokenizerCallBack onResultListener;
+    YCPayTokenizerCallBackImpl onResultListener;
     Request request;
 
-    public YCPayTokenizerTask(YCPayTokenizerParams params, RequestBody formBody, YCPayTokenizerCallBack listenerToken) {
+    public YCPayTokenizerTask(YCPayTokenizerParams params, RequestBody formBody, YCPayTokenizerCallBackImpl listenerToken) {
         initRequest(params, formBody);
         this.onResultListener = listenerToken;
     }

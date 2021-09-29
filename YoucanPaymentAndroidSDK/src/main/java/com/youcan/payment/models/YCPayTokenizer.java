@@ -1,6 +1,6 @@
 package com.youcan.payment.models;
 
-import com.youcan.payment.instrafaces.YCPayTokenizerCallBack;
+import com.youcan.payment.instrafaces.YCPayTokenizerCallBackImpl;
 import com.youcan.payment.task.YCPayTokenizerTask;
 
 
@@ -9,9 +9,9 @@ import okhttp3.RequestBody;
 
 public class YCPayTokenizer {
 
-    YCPayTokenizerCallBack listener;
-
-    public YCPayTokenizer(YCPayTokenizerCallBack listener) {
+    YCPayTokenizerCallBackImpl listener;
+    
+    public YCPayTokenizer(YCPayTokenizerCallBackImpl listener) {
         this.listener = listener;
     }
 

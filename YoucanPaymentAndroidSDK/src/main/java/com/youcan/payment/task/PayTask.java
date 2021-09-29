@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.youcan.payment.YCPay;
-import com.youcan.payment.instrafaces.PayCallBack;
+import com.youcan.payment.instrafaces.PayCallBackImpl;
 import com.youcan.payment.models.YCPayResult;
 
 import org.json.JSONObject;
@@ -18,9 +18,9 @@ public class PayTask extends AsyncTask<String, Void, YCPayResult> {
 
     String url;
     RequestBody formBody;
-    PayCallBack onResultListener;
+    PayCallBackImpl onResultListener;
 
-    public PayTask(String url, RequestBody formBody, PayCallBack listener) {
+    public PayTask(String url, RequestBody formBody, PayCallBackImpl listener) {
         this.url = url;
         this.formBody = formBody;
         this.onResultListener = listener;
@@ -50,7 +50,6 @@ public class PayTask extends AsyncTask<String, Void, YCPayResult> {
             }
             if(!result.has("success")) {
                 resultObject.is3DS = true;
-             //   YoucanPayment.load3DsPage(resultObject);
             }
 
             return resultObject;

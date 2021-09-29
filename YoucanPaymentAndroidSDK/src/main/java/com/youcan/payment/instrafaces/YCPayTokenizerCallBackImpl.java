@@ -2,7 +2,7 @@ package com.youcan.payment.instrafaces;
 
 import com.youcan.payment.models.YCPayToken;
 
-public interface YCPayTokenizerCallBack {
+public interface YCPayTokenizerCallBackImpl {
     void onResponse(YCPayToken token);
 
     void onError(String response);

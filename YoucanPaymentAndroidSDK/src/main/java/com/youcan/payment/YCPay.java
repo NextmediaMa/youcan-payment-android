@@ -3,9 +3,9 @@ package com.youcan.payment;
 
 import android.util.Log;
 
-import com.youcan.payment.config.Config;
-import com.youcan.payment.instrafaces.PayCallBack;
-import com.youcan.payment.instrafaces.YCPayTokenizerCallBack;
+import com.youcan.payment.instrafaces.PayCallBackImpl;
+import com.youcan.payment.instrafaces.YCPayTokenizerCallBackImpl;
+import com.youcan.payment.models.YCPayBalanceCallBack;
 import com.youcan.payment.models.YCPayTokenizer;
 import com.youcan.payment.models.Pay;
 import com.youcan.payment.models.YCPayResult;
@@ -22,8 +22,8 @@ import static com.youcan.payment.config.Config.API_URL;
 public class YCPay {
 
     static public Pay pay = new Pay();
-    static public PayCallBack payListener;
-    static YCPayTokenizerCallBack listener = new YCPayTokenizerCallBack() {
+    static public PayCallBackImpl payListener;
+    static YCPayTokenizerCallBackImpl tokenizerListener = new YCPayTokenizerCallBackImpl() {
         @Override
         public void onResponse(YCPayToken token) {
             if(token!=null) {
@@ -39,7 +39,8 @@ public class YCPay {
         }
     };
 
-    static public YCPayTokenizer tokenizer = new YCPayTokenizer(listener);
+    static public YCPayTokenizer ycPayTokenizer = new YCPayTokenizer(tokenizerListener);
+    static public YCPayBalanceCallBack ycPayBalanceCallBack = new YCPayBalanceCallBack();
 
     static public void setTokenId(String tokenId){
         YCPayToken token = new YCPayToken();
@@ -47,6 +48,11 @@ public class YCPay {
         pay.setToken(token);
     }
 
+    /**
+     * disable or enable
+     * test mode
+     * @param isTestMode disable/enable
+     */
     static void testMode(boolean isTestMode){
         if(isTestMode){
             API_URL = API_URL_TEST;
