@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.canshipy.youcanpaymentandroid"
+        applicationId "com.youcan.payment"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
