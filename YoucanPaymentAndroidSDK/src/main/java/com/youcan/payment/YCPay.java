@@ -3,6 +3,7 @@ package com.youcan.payment;
 
 import android.util.Log;
 
+import com.youcan.payment.config.Config;
 import com.youcan.payment.instrafaces.PayCallBack;
 import com.youcan.payment.instrafaces.YCPayTokenizerCallBack;
 import com.youcan.payment.models.YCPayTokenizer;
@@ -13,6 +14,10 @@ import com.youcan.payment.task.YCPayLoad3DSPageTask;
 
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
+
+import static com.youcan.payment.config.Config.API_URL_PROD;
+import static com.youcan.payment.config.Config.API_URL_TEST;
+import static com.youcan.payment.config.Config.API_URL;
 
 public class YCPay {
 
@@ -40,6 +45,15 @@ public class YCPay {
         YCPayToken token = new YCPayToken();
         token.setId(tokenId);
         pay.setToken(token);
+    }
+
+    static void testMode(boolean isTestMode){
+        if(isTestMode){
+            API_URL = API_URL_TEST;
+            return;
+        }
+
+        API_URL = API_URL_PROD;
     }
 
     static public void load3DsPage(YCPayResult result) {

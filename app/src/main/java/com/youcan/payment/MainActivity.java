@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Web Vieww", Toast.LENGTH_LONG).show();
         });
 
+        YCPay.testMode(false);
         YCPayTokenizerParams params = new YCPayTokenizerParams(tokenierUrl, 100.0, header);
         YCPay.tokenizer.create(params);
 

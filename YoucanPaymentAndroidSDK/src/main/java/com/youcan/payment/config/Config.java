@@ -3,6 +3,8 @@ package com.youcan.payment.config;
 public class Config {
 
     public static String API_URL = "https://pay.testyoucan.shop/api/";
+    public static String API_URL_TEST = "https://pay.testyoucan.shop/api/";
+    public static String API_URL_PROD = "https://pay.youcan.shop/api/";
     public static String URL_TOKENIZATION;
     public static String URL_PAY;
 
