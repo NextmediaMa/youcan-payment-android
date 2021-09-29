@@ -3,7 +3,7 @@ package com.canshipy.youcanpaymentandroidsdk.models;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-public class Result {
+public class YCPayResult {
 
     public boolean success = false;
     public String message = "";
@@ -21,9 +21,10 @@ public class Result {
     public String listenUrl = "";
     public boolean callBackInvoked = false;
 
-    public Result() {
+    public YCPayResult() {
     }
-    public Result(boolean success, String message, boolean is3DS, String threeDsPage, String transactionId, String callBackUrl, boolean callBackInvoked) {
+
+    public YCPayResult(boolean success, String message, boolean is3DS, String threeDsPage, String transactionId, String callBackUrl, boolean callBackInvoked) {
         this.success = success;
         this.message = message;
         this.is3DS = is3DS;
@@ -33,16 +34,16 @@ public class Result {
         this.callBackInvoked = callBackInvoked;
     }
 
-    public Result resultFromJson(String json) {
+    public YCPayResult resultFromJson(String json) {
 
         Gson gson = new Gson();
-        Result result;
+        YCPayResult result;
 
         try {
-            result = gson.fromJson(json, Result.class);
-        } catch (Exception e){
+            result = gson.fromJson(json, YCPayResult.class);
+        } catch (Exception e) {
             e.printStackTrace();
-            result = new Result();
+            result = new YCPayResult();
         }
 
         return result;

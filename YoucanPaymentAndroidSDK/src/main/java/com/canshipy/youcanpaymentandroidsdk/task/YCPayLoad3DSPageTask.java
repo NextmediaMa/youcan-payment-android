@@ -2,28 +2,28 @@ package com.canshipy.youcanpaymentandroidsdk.task;
 
 import android.os.AsyncTask;
 
-import com.canshipy.youcanpaymentandroidsdk.YoucanPayment;
-import com.canshipy.youcanpaymentandroidsdk.models.Result;
+import com.canshipy.youcanpaymentandroidsdk.YCPay;
+import com.canshipy.youcanpaymentandroidsdk.models.YCPayResult;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Load3DSPage extends AsyncTask<String, Void, Result> {
+public class YCPayLoad3DSPageTask extends AsyncTask<String, Void, YCPayResult> {
 
     String url;
     String listenerUrl;
     RequestBody formBody;
 
-    public Load3DSPage(String url,String callback, RequestBody formBody) {
+    public YCPayLoad3DSPageTask(String url, String callback, RequestBody formBody) {
         this.url = url;
         this.formBody = formBody;
         this.listenerUrl = callback ;
     }
 
     @Override
-    protected Result doInBackground(String... strings) {
+    protected YCPayResult doInBackground(String... strings) {
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
@@ -32,7 +32,7 @@ public class Load3DSPage extends AsyncTask<String, Void, Result> {
                 .post(formBody)
                 .build();
         Response response;
-        Result result = new Result();
+        YCPayResult result = new YCPayResult();
 
         try {
             response = okHttpClient.newCall(request).execute();
@@ -49,13 +49,13 @@ public class Load3DSPage extends AsyncTask<String, Void, Result> {
     }
 
     @Override
-    protected void onPostExecute(Result response) {
+    protected void onPostExecute(YCPayResult response) {
         super.onPostExecute(response);
 
         if(response.success)
-             YoucanPayment.payListener.on3DsResult(response);
+             YCPay.payListener.on3DsResult(response);
         else
-            YoucanPayment.payListener.onPayFailure(response.message);
+            YCPay.payListener.onPayFailure(response.message);
 
     }
 }

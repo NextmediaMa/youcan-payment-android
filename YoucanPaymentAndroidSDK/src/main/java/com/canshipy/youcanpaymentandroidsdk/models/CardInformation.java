@@ -2,10 +2,10 @@ package com.canshipy.youcanpaymentandroidsdk.models;
 
 public class CardInformation {
 
-    private String cardHolderName="";
-    private String cardNumber="";
-    private String expireDate="";
-    private String cvv="";
+    private String cardHolderName = "";
+    private String cardNumber = "";
+    private String expireDate = "";
+    private String cvv = "";
 
     public CardInformation(String cardHolderName, String cardNumber, String expireDate, String cvv) {
         this.cardHolderName = cardHolderName;

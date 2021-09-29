@@ -3,9 +3,9 @@ package com.canshipy.youcanpaymentandroidsdk.task;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.canshipy.youcanpaymentandroidsdk.YoucanPayment;
+import com.canshipy.youcanpaymentandroidsdk.YCPay;
 import com.canshipy.youcanpaymentandroidsdk.instrafaces.PayCallBack;
-import com.canshipy.youcanpaymentandroidsdk.models.Result;
+import com.canshipy.youcanpaymentandroidsdk.models.YCPayResult;
 
 import org.json.JSONObject;
 
@@ -14,7 +14,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class PayTask extends AsyncTask<String, Void, Result> {
+public class PayTask extends AsyncTask<String, Void, YCPayResult> {
 
     String url;
     RequestBody formBody;
@@ -27,7 +27,7 @@ public class PayTask extends AsyncTask<String, Void, Result> {
     }
 
     @Override
-    protected Result doInBackground(String... strings) {
+    protected YCPayResult doInBackground(String... strings) {
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
@@ -41,10 +41,10 @@ public class PayTask extends AsyncTask<String, Void, Result> {
         try {
             response = okHttpClient.newCall(request).execute();
             result = new JSONObject(response.body().string());
-            Result resultObject = new Result().resultFromJson(result.toString());
+            YCPayResult resultObject = new YCPayResult().resultFromJson(result.toString());
             Log.e("build_test",  result.toString());
             if(!response.isSuccessful()){
-                Result result1 = new Result();
+                YCPayResult result1 = new YCPayResult();
                 result1.message = result.getString("message");
                 return result1;
             }
@@ -56,7 +56,7 @@ public class PayTask extends AsyncTask<String, Void, Result> {
             return resultObject;
         } catch (Exception e) {
             e.printStackTrace();
-            Result resultObject = new Result();
+            YCPayResult resultObject = new YCPayResult();
             resultObject.message = "error has occurred";
             resultObject.success =false;
 
@@ -66,18 +66,18 @@ public class PayTask extends AsyncTask<String, Void, Result> {
     }
 
     @Override
-    protected void onPostExecute(Result result) {
+    protected void onPostExecute(YCPayResult result) {
         super.onPostExecute(result);
 
         if(result.is3DS ) {
-           YoucanPayment.load3DsPage(result);
+           YCPay.load3DsPage(result);
             return;
         }
 
         if(result.success) {
-          YoucanPayment.payListener.onPaySuccess(result);
+          YCPay.payListener.onPaySuccess(result);
         } else {
-          YoucanPayment.payListener.onPayFailure(result.message);
+          YCPay.payListener.onPayFailure(result.message);
         }
 
     }

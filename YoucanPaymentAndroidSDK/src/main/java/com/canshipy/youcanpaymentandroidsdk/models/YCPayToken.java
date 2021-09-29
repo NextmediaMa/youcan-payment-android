@@ -3,7 +3,7 @@ package com.canshipy.youcanpaymentandroidsdk.models;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-public class Token {
+public class YCPayToken {
 
     @SerializedName("transaction_id")
     String transactionId = "";
@@ -13,24 +13,24 @@ public class Token {
     @SerializedName("created_at")
     String createdAt = "";
 
-    public Token() {
+    public YCPayToken() {
     }
 
-    public Token(String transactionId, String id, String updatedAt, String createdAt) {
+    public YCPayToken(String transactionId, String id, String updatedAt, String createdAt) {
         this.transactionId = transactionId;
         this.id = id;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
     }
 
-    public Token tokenFromJson(String json){
+    public YCPayToken tokenFromJson(String json) {
         Gson gson = new Gson();
-        Token token;
+        YCPayToken token;
         try {
-            token = gson.fromJson(json, Token.class);
-        } catch (Exception e){
+            token = gson.fromJson(json, YCPayToken.class);
+        } catch (Exception e) {
             e.printStackTrace();
-            token = new Token();
+            token = new YCPayToken();
         }
         return token;
     }

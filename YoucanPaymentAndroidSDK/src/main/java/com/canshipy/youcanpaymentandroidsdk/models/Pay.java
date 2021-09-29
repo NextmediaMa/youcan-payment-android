@@ -2,7 +2,7 @@ package com.canshipy.youcanpaymentandroidsdk.models;
 
 import android.util.Log;
 
-import com.canshipy.youcanpaymentandroidsdk.YoucanPayment;
+import com.canshipy.youcanpaymentandroidsdk.YCPay;
 import com.canshipy.youcanpaymentandroidsdk.instrafaces.PayCallBack;
 import com.canshipy.youcanpaymentandroidsdk.task.PayTask;
 
@@ -16,9 +16,10 @@ public class Pay {
 
     String payUrl = URL_PAY;
     CardInformation cardInformation;
-    Token token;
+    YCPayToken token;
 
-    public Pay(){}
+    public Pay() {
+    }
 
     public Pay setCardInformation(CardInformation cardInformation) {
         this.cardInformation = cardInformation;
@@ -32,32 +33,32 @@ public class Pay {
         return this;
     }
 
-    public Pay setToken(Token token) {
+    public Pay setToken(YCPayToken token) {
         this.token = token;
 
         return this;
     }
 
     public Pay setListener(PayCallBack payListener) {
-        YoucanPayment.payListener = payListener;
+        YCPay.payListener = payListener;
 
         return this;
     }
 
     public void call() {
-        if(token == null) {
+        if (token == null) {
             Log.e("result", "Token: Token is null");
 
             return;
         }
 
-        if(YoucanPayment.payListener == null) {
+        if (YCPay.payListener == null) {
             Log.e("result", "call: listener null");
 
             return;
         }
 
-         RequestBody form = new FormBody.Builder()
+        RequestBody form = new FormBody.Builder()
                 .add("card_holder_name", this.cardInformation.getCardHolderName())
                 .add("cvv", this.cardInformation.getCvv())
                 .add("credit_card", this.cardInformation.getCardNumber())
@@ -67,6 +68,6 @@ public class Pay {
                 .add("is_mobile", "1")
                 .build();
 
-        new PayTask(this.payUrl,form, YoucanPayment.payListener).execute("");
+        new PayTask(this.payUrl, form, YCPay.payListener).execute("");
     }
 }
