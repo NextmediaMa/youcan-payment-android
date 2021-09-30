@@ -3,8 +3,8 @@ package com.youcan.payment.task;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.youcan.payment.instrafaces.YCPayBalanceCallBackImpl;
-import com.youcan.payment.models.YCPayBalanceCallBakParams;
+import com.youcan.payment.instrafaces.YCPaymentCallBackImpl;
+import com.youcan.payment.models.YCPaymentCallBakParams;
 import com.youcan.payment.models.YCPayBalanceResult;
 
 import org.json.JSONObject;
@@ -12,29 +12,35 @@ import org.json.JSONObject;
 import java.util.Iterator;
 import java.util.Map;
 
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class YCPayBalanceCallBackTask extends AsyncTask<String, Void, YCPayBalanceResult> {
+public class YCPaymentCallBackTask extends AsyncTask<String, Void, YCPayBalanceResult> {
 
-    YCPayBalanceCallBakParams params;
+    YCPaymentCallBakParams params;
     Request.Builder requestBuilder;
-    YCPayBalanceCallBackImpl onResultListener;
+    YCPaymentCallBackImpl onResultListener;
     Request request;
-
-    public YCPayBalanceCallBackTask(YCPayBalanceCallBakParams params, RequestBody formBody, YCPayBalanceCallBackImpl listenerToken) {
-        initRequest(params, formBody);
+    String balanceCallBackUrl;
+    public YCPaymentCallBackTask(String balanceCallBackUrl, String transactionId, YCPaymentCallBakParams params, YCPaymentCallBackImpl listenerToken) {
+        initRequest(balanceCallBackUrl,transactionId,params);
         this.onResultListener = listenerToken;
     }
 
-    void initRequest(YCPayBalanceCallBakParams params, RequestBody formBody) {
+    void initRequest(String balanceCallBackUrl, String transactionId, YCPaymentCallBakParams params) {
         Iterator hmIterator = params.getHeader().entrySet().iterator();
 
         this.params = params;
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("transaction_id", transactionId)
+                .build();
+
         this.requestBuilder = new Request.Builder();
-        this.requestBuilder.url(params.getBalanceCallBackUrl())
+        this.requestBuilder.url(balanceCallBackUrl)
                 .post(formBody);
 
         while (hmIterator.hasNext()) {
@@ -91,6 +97,6 @@ public class YCPayBalanceCallBackTask extends AsyncTask<String, Void, YCPayBalan
             return;
         }
 
-        onResultListener.onResponse(result);
+        onResultListener.onSuccess(result.getStatus());
     }
 }

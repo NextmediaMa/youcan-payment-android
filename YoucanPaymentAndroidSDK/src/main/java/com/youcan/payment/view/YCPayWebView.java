@@ -48,7 +48,7 @@ public class YCPayWebView extends WebView {
                     if (url.contains("is_success=0")) {
                         YCPay.payListener.onPayFailure("3Ds not Success");
                         if (webViewListener != null) {
-                            webViewListener.onResult();
+                            webViewListener.onFinish();
                         }
                         return;
                     }
@@ -56,7 +56,7 @@ public class YCPayWebView extends WebView {
                     if (url.contains("is_success=1")) {
                         YCPay.payListener.onPaySuccess(new YCPayResult());
                         if (webViewListener != null) {
-                            webViewListener.onResult();
+                            webViewListener.onFinish();
                         }
 
                         return;
@@ -67,7 +67,7 @@ public class YCPayWebView extends WebView {
                     exception.printStackTrace();
                     YCPay.payListener.onPayFailure("3Ds View Page: error has occurred");
                     if (webViewListener != null) {
-                        webViewListener.onResult();
+                        webViewListener.onFinish();
                     }
 
                     return;

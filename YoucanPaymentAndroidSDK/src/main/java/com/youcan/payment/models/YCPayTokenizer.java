@@ -9,18 +9,18 @@ import okhttp3.RequestBody;
 
 public class YCPayTokenizer {
 
-    YCPayTokenizerCallBackImpl listener;
-    
-    public YCPayTokenizer(YCPayTokenizerCallBackImpl listener) {
-        this.listener = listener;
-    }
-
-    public void create(YCPayTokenizerParams params) {
+    /**
+     * this method for  init and create YCPayTokenizer
+     * @param tokenizerUrl your tokenizer url server
+     * @param params Tokenizer parameters
+     * @param onResult callback result
+     */
+    public void create(String tokenizerUrl, YCPayTokenizerParams params,YCPayTokenizerCallBackImpl onResult) {
         RequestBody form = new FormBody.Builder()
                 .add("amount", params.getAmount() + "")
                 .add("currency", params.getCurrency())
                 .build();
 
-        new YCPayTokenizerTask(params, form, listener).execute("");
+        new YCPayTokenizerTask(tokenizerUrl,params, form, onResult).execute("");
     }
 }

@@ -19,7 +19,7 @@ public class YCPayLoad3DSPageTask extends AsyncTask<String, Void, YCPayResult> {
     public YCPayLoad3DSPageTask(String url, String callback, RequestBody formBody) {
         this.url = url;
         this.formBody = formBody;
-        this.listenerUrl = callback ;
+        this.listenerUrl = callback;
     }
 
     @Override
@@ -44,18 +44,16 @@ public class YCPayLoad3DSPageTask extends AsyncTask<String, Void, YCPayResult> {
             result.message = "Load3DSPage :error has occurred";
         }
 
-        return  result;
-
+        return result;
     }
 
     @Override
     protected void onPostExecute(YCPayResult response) {
         super.onPostExecute(response);
 
-        if(response.success)
-             YCPay.payListener.on3DsResult(response);
+        if (response.success)
+            YCPay.payListener.on3DsResult(response);
         else
             YCPay.payListener.onPayFailure(response.message);
-
     }
 }

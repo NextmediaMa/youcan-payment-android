@@ -5,35 +5,30 @@ import com.youcan.payment.config.Config;
 import java.util.HashMap;
 public class YCPayTokenizerParams {
 
-    private String tokenizerUrl;
     private String currency = Config.CURRENCY;
     private double amount;
     private HashMap<String, String> header = new HashMap<>();
 
     /**
      *
-     * @param tokenizerUrl tokenizer Url test
      * @param amount
      */
-    public YCPayTokenizerParams(String tokenizerUrl, double amount) {
-        this.tokenizerUrl = tokenizerUrl;
+    public YCPayTokenizerParams(double amount) {
+      //  this.tokenizerUrl = tokenizerUrl;
         this.amount = amount;
     }
 
-    public YCPayTokenizerParams(String tokenizerUrl, double amount, String currency) {
-        this.tokenizerUrl = tokenizerUrl;
+    public YCPayTokenizerParams(double amount, String currency) {
         this.currency = currency;
         this.amount = amount;
     }
 
-    public YCPayTokenizerParams(String tokenizerUrl, double amount, HashMap<String, String> header) {
-        this.tokenizerUrl = tokenizerUrl;
+    public YCPayTokenizerParams(double amount, HashMap<String, String> header) {
         this.amount = amount;
         this.header = header;
     }
 
-    public YCPayTokenizerParams(String tokenizerUrl, double amount, String currency, HashMap<String, String> header) {
-        this.tokenizerUrl = tokenizerUrl;
+    public YCPayTokenizerParams(double amount, String currency, HashMap<String, String> header) {
         this.currency = currency;
         this.amount = amount;
         this.header = header;
@@ -44,9 +39,10 @@ public class YCPayTokenizerParams {
         return this;
     }
 
-    public String getTokenizerUrl() {
-        return tokenizerUrl;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
+
 
     public String getCurrency() {
         return currency;
@@ -63,8 +59,7 @@ public class YCPayTokenizerParams {
     @Override
     public String toString() {
         return "TokenizerParams{" +
-                "tokenizerUrl='" + tokenizerUrl + '\'' +
-                ", currency='" + currency + '\'' +
+                "currency='" + currency + '\'' +
                 ", amount=" + amount +
                 '}';
     }

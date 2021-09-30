@@ -15,6 +15,7 @@ public class Pay {
     String payUrl = Config.URL_PAY;
     CardInformation cardInformation;
     YCPayToken token;
+    String TAG = "YCPay";
 
     public Pay() {
     }
@@ -59,14 +60,14 @@ public class Pay {
 
             return;
         }
-
+        Log.e(TAG, "call: Token "+token.id );
         RequestBody form = new FormBody.Builder()
                 .add("card_holder_name", this.cardInformation.getCardHolderName())
                 .add("cvv", this.cardInformation.getCvv())
                 .add("credit_card", this.cardInformation.getCardNumber())
                 .add("expire_date", this.cardInformation.getExpireDate())
                 .add("token_id", token.id)
-                .add("pub_key", Config.PUB_KEY)
+                  .add("pub_key", "")
                 .add("is_mobile", "1")
                 .build();
 

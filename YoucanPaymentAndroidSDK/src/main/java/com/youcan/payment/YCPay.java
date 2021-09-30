@@ -1,11 +1,9 @@
 package com.youcan.payment;
 
 
-import android.util.Log;
 
 import com.youcan.payment.instrafaces.PayCallBackImpl;
-import com.youcan.payment.instrafaces.YCPayTokenizerCallBackImpl;
-import com.youcan.payment.models.YCPayBalanceCallBack;
+import com.youcan.payment.models.YCPaymentCallBack;
 import com.youcan.payment.models.YCPayTokenizer;
 import com.youcan.payment.models.Pay;
 import com.youcan.payment.models.YCPayResult;
@@ -15,32 +13,12 @@ import com.youcan.payment.task.YCPayLoad3DSPageTask;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
-import static com.youcan.payment.config.Config.API_URL_PROD;
-import static com.youcan.payment.config.Config.API_URL_TEST;
-import static com.youcan.payment.config.Config.API_URL;
-
 public class YCPay {
 
     static public Pay pay = new Pay();
     static public PayCallBackImpl payListener;
-    static YCPayTokenizerCallBackImpl tokenizerListener = new YCPayTokenizerCallBackImpl() {
-        @Override
-        public void onResponse(YCPayToken token) {
-            if(token!=null) {
-                pay.setToken(token);
-                Log.e("YCPay", "onResponse: "+token.toString() );
-
-            }
-        }
-
-        @Override
-        public void onError(String response) {
-            Log.e("YCPay", "onError: "+response );
-        }
-    };
-
-    static public YCPayTokenizer ycPayTokenizer = new YCPayTokenizer(tokenizerListener);
-    static public YCPayBalanceCallBack ycPayBalanceCallBack = new YCPayBalanceCallBack();
+    static public YCPayTokenizer ycPayTokenizer = new YCPayTokenizer();
+    static public YCPaymentCallBack ycPaymentCallBack = new YCPaymentCallBack();
 
     static public void setTokenId(String tokenId){
         YCPayToken token = new YCPayToken();
@@ -48,19 +26,6 @@ public class YCPay {
         pay.setToken(token);
     }
 
-    /**
-     * disable or enable
-     * test mode
-     * @param isTestMode disable/enable
-     */
-    static void testMode(boolean isTestMode){
-        if(isTestMode){
-            API_URL = API_URL_TEST;
-            return;
-        }
-
-        API_URL = API_URL_PROD;
-    }
 
     static public void load3DsPage(YCPayResult result) {
         RequestBody form = new FormBody.Builder()

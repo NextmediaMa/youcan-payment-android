@@ -10,7 +10,7 @@ public class YCPayBalanceResult {
     private String orderId;
     private String amount;
     private String currency;
-    private long status;
+    private int status;
     @SerializedName("created_at")
     private String createdAt;
     private String messageError = "";
@@ -30,7 +30,7 @@ public class YCPayBalanceResult {
         return currency;
     }
 
-    public long getStatus() {
+    public int getStatus() {
         return status;
     }
 
