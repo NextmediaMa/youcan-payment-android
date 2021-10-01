@@ -1,11 +1,11 @@
 package com.youcan.payment.models;
 
-import com.youcan.payment.config.Config;
+import com.youcan.payment.config.YCPayConfig;
 
 import java.util.HashMap;
 public class YCPayTokenizerParams {
 
-    private String currency = Config.CURRENCY;
+    private String currency = YCPayConfig.CURRENCY;
     private double amount;
     private HashMap<String, String> header = new HashMap<>();
 

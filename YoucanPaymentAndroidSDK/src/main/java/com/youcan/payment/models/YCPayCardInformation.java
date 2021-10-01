@@ -1,13 +1,13 @@
 package com.youcan.payment.models;
 
-public class CardInformation {
+public class YCPayCardInformation {
 
     private String cardHolderName = "";
     private String cardNumber = "";
     private String expireDate = "";
     private String cvv = "";
 
-    public CardInformation(String cardHolderName, String cardNumber, String expireDate, String cvv) {
+    public YCPayCardInformation(String cardHolderName, String cardNumber, String expireDate, String cvv) {
         this.cardHolderName = cardHolderName;
         this.cardNumber = cardNumber;
         this.expireDate = expireDate;

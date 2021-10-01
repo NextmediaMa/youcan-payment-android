@@ -1,6 +1,6 @@
 package com.youcan.payment.config;
 
-public class Config {
+public class YCPayConfig {
 
     public static String API_URL = "https://pay.youcan.shop/api/";
     public static String URL_PAY;
