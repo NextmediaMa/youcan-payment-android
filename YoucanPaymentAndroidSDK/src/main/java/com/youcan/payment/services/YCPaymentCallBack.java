@@ -28,7 +28,7 @@ public class YCPaymentCallBack {
      * @param transactionId Token TransactionId
      * @param onResult      listener to catch result of your request
      */
-    public void call(String transactionId, YCPaymentCallBackImpl onResult) throws  Exception{
+    public void call(String transactionId, YCPaymentCallBackImpl onResult) throws Exception {
         new YCPaymentCallBackTask(balanceCallUrl.toString(), transactionId, params, onResult).execute("");
     }
 }

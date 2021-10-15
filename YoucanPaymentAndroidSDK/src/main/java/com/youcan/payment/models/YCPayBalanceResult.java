@@ -14,6 +14,7 @@ public class YCPayBalanceResult {
     @SerializedName("created_at")
     private String createdAt;
     private String messageError = "";
+
     public String getId() {
         return id;
     }
@@ -38,9 +39,10 @@ public class YCPayBalanceResult {
         return createdAt;
     }
 
-    public String getMessageError(){
+    public String getMessageError() {
         return messageError;
     }
+
     public void setMessageError(String messageError) {
         this.messageError = messageError;
     }
@@ -56,7 +58,6 @@ public class YCPayBalanceResult {
         }
         return result;
     }
-
 
     @Override
     public String toString() {

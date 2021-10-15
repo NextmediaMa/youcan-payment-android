@@ -97,8 +97,8 @@ public class YCPayWebView extends WebView {
         String[] data = urlSplit[1].split("&");
         HashMap<String, String> hash = new HashMap<>();
 
-        for (int i = 0; i < data.length; i++) {
-            hash.put(data[i].split("=")[0], data[i].split("=")[1].replace("+"," "));
+        for (String datum : data) {
+            hash.put(datum.split("=")[0], datum.split("=")[1].replace("+", " "));
         }
 
         return hash;

@@ -9,6 +9,7 @@ import com.youcan.payment.services.YCPaymentCallBack;
 import com.youcan.payment.models.YCPayResult;
 import com.youcan.payment.models.YCPayToken;
 import com.youcan.payment.task.PayTask;
+import com.youcan.payment.task.TestExecutors;
 import com.youcan.payment.task.YCPayLoad3DSPageTask;
 
 import okhttp3.FormBody;
@@ -23,7 +24,6 @@ public class YCPay {
      * onPaySuccess / onPayFailure / on3DsResult
      */
     public PayCallBackImpl payListener;
-    
 
     /**
      * config SandBox mode
@@ -52,18 +52,23 @@ public class YCPay {
     /**
      * Call method allow you to effect your payment
      */
-    public void pay(YCPayCardInformation cardInformation, PayCallBackImpl payCallBack) {
+    public void pay(YCPayCardInformation cardInformation, PayCallBackImpl payCallBack) throws Exception {
         this.payListener = payCallBack;
 
         if (token == null) {
             Log.e(TAG, "Token: Token is null");
 
-            return;
+            throw new Exception("Null Exception: Token is null");
         }
-        if (payListener == null) {
-            Log.e(TAG, "Listener: Token is null");
 
-            return;
+        if (payListener == null) {
+
+            throw new Exception("Null Exception: Listener is null");
+        }
+
+        if (cardInformation == null) {
+
+            throw new Exception("Null Exception: cardInformation is null");
         }
 
         RequestBody form = new FormBody.Builder()
@@ -77,6 +82,7 @@ public class YCPay {
                 .build();
 
         new PayTask(this.payUrl, form, this.payListener).execute("");
+        //new TestExecutors(this.payUrl, form, this.payListener).call();
     }
 
     /**

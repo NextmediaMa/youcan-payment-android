@@ -1,5 +1,6 @@
 package com.youcan.payment;
 
+import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     YCPayCardInformation cardInformation;
     String TAG = "YCPay";
-    YCPay ycPay = new YCPay("pub_40526e71-75b8-4258-a898-b0a44c53", "a91ae2de-6942-486e-93c6-93ab27275dae");
+    YCPay ycPay = new YCPay("pub_40526e71-75b8-4258-a898-b0a44c53", "2ea1b92c-0edb-472c-aaf2-ea9bd4b09d0d");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +55,17 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // init YCPay
         initYCPay();
+
         // set on finish webView listener
+        initWebViewListener();
+
+        // set on button clicked action
+        button.setOnClickListener(v -> onPayPressed());
+    }
+
+    private void initWebViewListener() {
         ycPayWebView.setWebViewListener(new YCPayWebViewCallBackImpl() {
 
             @Override
@@ -69,12 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
                 Log.e(TAG, "onPayFailure: " + message);
             }
-        });
-
-        // set on button clicked action
-        button.setOnClickListener(v -> {
-            ycPay.pay(cardInformation, onPayListener);
-            progressBar.show();
         });
     }
 
@@ -92,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initYCPaymentHandler() throws MalformedURLException {
         // create BalanceCallBak Params
-        balanceCallBackUrl = new URL("https://www.canshipy.com/api/sellers/payment/callback");
+        balanceCallBackUrl = new URL("https://preprod.allomystar.com/api/sellers/payment/callback");
         ycPaymentCallBakParams = new YCPaymentCallBakParams(header);
         ycPay.ycPaymentCallBack.create(balanceCallBackUrl, ycPaymentCallBakParams);
     }
@@ -109,9 +113,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPayFailure(String response) {
-                Log.e(TAG, "onPayFailure: " + response);
-                Toast.makeText(MainActivity.this, response, Toast.LENGTH_LONG).show();
-                dismissProgressDialog();
+                runOnUiThread(() -> {
+                    Log.e(TAG, "onPayFailure: " + response);
+                    Toast.makeText(MainActivity.this, response, Toast.LENGTH_LONG).show();
+                    dismissProgressDialog();
+                });
             }
 
             @Override
@@ -122,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        cardInformation = new YCPayCardInformation("Abdelmjid ASOUAB", "4552949183673104", "02/22", "375"); //message=System+malfunction
+        cardInformation = new YCPayCardInformation("ALOUANE ANASS", "5487477802835935", "10/24", "857"); //message=System+malfunction
     }
 
     private void paymentCallBackHandler() throws Exception {
@@ -138,6 +144,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void onPayPressed() {
+        try {
+            ycPay.pay(cardInformation, onPayListener);
+            progressBar.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     void dismissProgressDialog() {
