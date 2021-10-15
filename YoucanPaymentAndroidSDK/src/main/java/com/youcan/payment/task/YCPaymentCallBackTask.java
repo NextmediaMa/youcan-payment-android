@@ -3,7 +3,7 @@ package com.youcan.payment.task;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.youcan.payment.instrafaces.YCPaymentCallBackImpl;
+import com.youcan.payment.interfaces.YCPaymentCallBackImpl;
 import com.youcan.payment.models.YCPaymentCallBakParams;
 import com.youcan.payment.models.YCPayBalanceResult;
 

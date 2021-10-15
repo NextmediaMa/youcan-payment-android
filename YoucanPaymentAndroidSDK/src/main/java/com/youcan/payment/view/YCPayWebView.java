@@ -9,9 +9,11 @@ import android.webkit.WebViewClient;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.youcan.payment.YCPay;
-import com.youcan.payment.instrafaces.YCPayWebViewCallBackImpl;
+import com.youcan.payment.interfaces.YCPayWebViewCallBackImpl;
 import com.youcan.payment.models.YCPayResult;
+
+import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class YCPayWebView extends WebView {
 
@@ -31,7 +33,6 @@ public class YCPayWebView extends WebView {
         super(context, attrs);
         this.getSettings().setJavaScriptEnabled(true);
         this.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-
         this.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -46,17 +47,18 @@ public class YCPayWebView extends WebView {
 
                 try {
                     if (url.contains("is_success=0")) {
-                        YCPay.payListener.onPayFailure("3Ds not Success");
+                        HashMap<String, String> urlData = getListenUrlResult(url);
+
                         if (webViewListener != null) {
-                            webViewListener.onFinish();
+                            webViewListener.onPayFailure(urlData.get("message"));
                         }
+
                         return;
                     }
 
                     if (url.contains("is_success=1")) {
-                        YCPay.payListener.onPaySuccess(new YCPayResult());
                         if (webViewListener != null) {
-                            webViewListener.onFinish();
+                            webViewListener.onPaySuccess();
                         }
 
                         return;
@@ -65,12 +67,9 @@ public class YCPayWebView extends WebView {
                     return;
                 } catch (Exception exception) {
                     exception.printStackTrace();
-                    YCPay.payListener.onPayFailure("3Ds View Page: error has occurred");
                     if (webViewListener != null) {
-                        webViewListener.onFinish();
+                        webViewListener.onPayFailure("3Ds: error has occurred");
                     }
-
-                    return;
                 }
             }
         });
@@ -85,4 +84,23 @@ public class YCPayWebView extends WebView {
         this.loadDataWithBaseURL("", result.threeDsPage, "text/html", "utf-8", null);
     }
 
+    public void loadResultUrl(YCPayResult result) {
+        this.listenerUrl = result.listenUrl;
+        this.loadUrl(result.redirectUrl);
+    }
+
+    private HashMap<String, String> getListenUrlResult(String url) {
+        String[] urlSplit = url.split(Pattern.quote("?"));
+        if (urlSplit.length == 1) {
+            return new HashMap<>();
+        }
+        String[] data = urlSplit[1].split("&");
+        HashMap<String, String> hash = new HashMap<>();
+
+        for (int i = 0; i < data.length; i++) {
+            hash.put(data[i].split("=")[0], data[i].split("=")[1].replace("+"," "));
+        }
+
+        return hash;
+    }
 }

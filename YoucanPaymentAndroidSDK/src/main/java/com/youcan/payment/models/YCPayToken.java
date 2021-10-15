@@ -6,21 +6,20 @@ import com.google.gson.annotations.SerializedName;
 public class YCPayToken {
 
     @SerializedName("transaction_id")
-    String transactionId = "";
-    String id = "";
+    private String transactionId = "";
+    private String id = "";
     @SerializedName("updated_at")
-    String updatedAt = "";
+    private String updatedAt = "";
     @SerializedName("created_at")
-    String createdAt = "";
+    private String createdAt = "";
+    private String pubKey = "";
 
     public YCPayToken() {
     }
 
-    public YCPayToken(String transactionId, String id, String updatedAt, String createdAt) {
+    public YCPayToken(String transactionId, String pubKey) {
         this.transactionId = transactionId;
-        this.id = id;
-        this.updatedAt = updatedAt;
-        this.createdAt = createdAt;
+        this.pubKey = pubKey;
     }
 
     public YCPayToken tokenFromJson(String json) {
@@ -67,13 +66,22 @@ public class YCPayToken {
         return createdAt;
     }
 
+    public String getPubKey() {
+        return pubKey;
+    }
+
+    public void setPubKey(String pubKey) {
+        this.pubKey = pubKey;
+    }
+
     @Override
     public String toString() {
-        return "Token{" +
+        return "YCPayToken{" +
                 "transactionId='" + transactionId + '\'' +
                 ", id='" + id + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 ", createdAt='" + createdAt + '\'' +
+                ", pubKey='" + pubKey + '\'' +
                 '}';
     }
 }

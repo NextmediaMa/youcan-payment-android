@@ -14,7 +14,7 @@ public class YCPayResult {
     @SerializedName("transaction_id")
     public String transactionId = "";
     @SerializedName("return_url")
-    public String callBackUrl = "";
+    public String returnUrl = "";
     @SerializedName("redirect_url")
     public String redirectUrl = "";
     @SerializedName("listen_url")
@@ -30,7 +30,7 @@ public class YCPayResult {
         this.is3DS = is3DS;
         this.threeDsPage = threeDsPage;
         this.transactionId = transactionId;
-        this.callBackUrl = callBackUrl;
+        this.returnUrl = callBackUrl;
         this.callBackInvoked = callBackInvoked;
     }
 
@@ -58,7 +58,7 @@ public class YCPayResult {
                 ", threeDsPage='" + threeDsPage + '\'' +
                 ", paReq='" + paReq + '\'' +
                 ", transactionId='" + transactionId + '\'' +
-                ", callBackUrl='" + callBackUrl + '\'' +
+                ", callBackUrl='" + returnUrl + '\'' +
                 ", redirectUrl='" + redirectUrl + '\'' +
                 ", listenUrl='" + listenUrl + '\'' +
                 ", callBackInvoked=" + callBackInvoked +

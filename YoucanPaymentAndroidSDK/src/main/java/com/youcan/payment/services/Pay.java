@@ -2,9 +2,8 @@ package com.youcan.payment.services;
 
 import android.util.Log;
 
-import com.youcan.payment.YCPay;
 import com.youcan.payment.config.YCPayConfig;
-import com.youcan.payment.instrafaces.PayCallBackImpl;
+import com.youcan.payment.interfaces.PayCallBackImpl;
 import com.youcan.payment.models.YCPayCardInformation;
 import com.youcan.payment.models.YCPayToken;
 import com.youcan.payment.task.PayTask;
@@ -18,6 +17,7 @@ public class Pay {
     YCPayCardInformation cardInformation;
     YCPayToken token;
     String TAG = "YCPay";
+    public PayCallBackImpl payListener;
 
     public Pay() {
     }
@@ -57,7 +57,7 @@ public class Pay {
      * @return Pay instance
      */
     public Pay setListener(PayCallBackImpl payListener) {
-        YCPay.payListener = payListener;
+        this.payListener = payListener;
 
         return this;
     }
@@ -72,7 +72,7 @@ public class Pay {
             return;
         }
 
-        if (YCPay.payListener == null) {
+        if (payListener == null) {
             Log.e(TAG, "payListener: listener null");
 
             return;
@@ -88,6 +88,6 @@ public class Pay {
                 .add("is_mobile", "1")
                 .build();
 
-        new PayTask(this.payUrl, form, YCPay.payListener).execute("");
+        new PayTask(this.payUrl, form, this.payListener).execute("");
     }
 }

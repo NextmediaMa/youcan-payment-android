@@ -1,4 +1,4 @@
-package com.youcan.payment.instrafaces;
+package com.youcan.payment.interfaces;
 
 public interface YCPaymentCallBackImpl {
     void onSuccess(int statusResult);

@@ -1,6 +1,6 @@
 package com.youcan.payment.services;
 
-import com.youcan.payment.instrafaces.YCPaymentCallBackImpl;
+import com.youcan.payment.interfaces.YCPaymentCallBackImpl;
 import com.youcan.payment.models.YCPaymentCallBakParams;
 import com.youcan.payment.task.YCPaymentCallBackTask;
 
@@ -28,7 +28,7 @@ public class YCPaymentCallBack {
      * @param transactionId Token TransactionId
      * @param onResult      listener to catch result of your request
      */
-    public void call(String transactionId, YCPaymentCallBackImpl onResult) {
+    public void call(String transactionId, YCPaymentCallBackImpl onResult) throws  Exception{
         new YCPaymentCallBackTask(balanceCallUrl.toString(), transactionId, params, onResult).execute("");
     }
 }

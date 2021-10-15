@@ -2,7 +2,7 @@ package com.youcan.payment.task;
 
 import android.os.AsyncTask;
 
-import com.youcan.payment.YCPay;
+import com.youcan.payment.interfaces.PayCallBackImpl;
 import com.youcan.payment.models.YCPayResult;
 
 import okhttp3.OkHttpClient;
@@ -15,11 +15,12 @@ public class YCPayLoad3DSPageTask extends AsyncTask<String, Void, YCPayResult> {
     String url;
     String listenerUrl;
     RequestBody formBody;
-
-    public YCPayLoad3DSPageTask(String url, String callback, RequestBody formBody) {
+    PayCallBackImpl payCallBack;
+    public YCPayLoad3DSPageTask(String url, String callback, RequestBody formBody, PayCallBackImpl listener) {
         this.url = url;
         this.formBody = formBody;
         this.listenerUrl = callback;
+        this.payCallBack = listener;
     }
 
     @Override
@@ -51,9 +52,10 @@ public class YCPayLoad3DSPageTask extends AsyncTask<String, Void, YCPayResult> {
     protected void onPostExecute(YCPayResult response) {
         super.onPostExecute(response);
 
-        if (response.success)
-            YCPay.payListener.on3DsResult(response);
-        else
-            YCPay.payListener.onPayFailure(response.message);
+        if (response.success) {
+            payCallBack.on3DsResult(response);
+        } else {
+            payCallBack.onPayFailure(response.message);
+        }
     }
 }
