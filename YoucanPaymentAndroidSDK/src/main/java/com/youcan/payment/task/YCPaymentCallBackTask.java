@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -24,9 +25,9 @@ public class YCPaymentCallBackTask extends AsyncTask<String, Void, YCPayBalanceR
     Request.Builder requestBuilder;
     YCPaymentCallBackImpl onResultListener;
     Request request;
-    String balanceCallBackUrl;
+
     public YCPaymentCallBackTask(String balanceCallBackUrl, String transactionId, YCPaymentCallBakParams params, YCPaymentCallBackImpl listenerToken) {
-        initRequest(balanceCallBackUrl,transactionId,params);
+        initRequest(balanceCallBackUrl, transactionId, params);
         this.onResultListener = listenerToken;
     }
 
@@ -56,7 +57,12 @@ public class YCPaymentCallBackTask extends AsyncTask<String, Void, YCPayBalanceR
     @Override
     protected YCPayBalanceResult doInBackground(String... strings) {
 
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(30, TimeUnit.SECONDS);
+        builder.readTimeout(30, TimeUnit.SECONDS);
+        builder.writeTimeout(30, TimeUnit.SECONDS);
+
+        OkHttpClient okHttpClient = builder.build();
 
         Response response;
         String result;

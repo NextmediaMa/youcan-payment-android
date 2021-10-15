@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import com.youcan.payment.interfaces.PayCallBackImpl;
 import com.youcan.payment.models.YCPayResult;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -16,6 +18,7 @@ public class YCPayLoad3DSPageTask extends AsyncTask<String, Void, YCPayResult> {
     String listenerUrl;
     RequestBody formBody;
     PayCallBackImpl payCallBack;
+
     public YCPayLoad3DSPageTask(String url, String callback, RequestBody formBody, PayCallBackImpl listener) {
         this.url = url;
         this.formBody = formBody;
@@ -26,7 +29,13 @@ public class YCPayLoad3DSPageTask extends AsyncTask<String, Void, YCPayResult> {
     @Override
     protected YCPayResult doInBackground(String... strings) {
 
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(30, TimeUnit.SECONDS);
+        builder.readTimeout(30, TimeUnit.SECONDS);
+        builder.writeTimeout(30, TimeUnit.SECONDS);
+
+        OkHttpClient okHttpClient = builder.build();
+
         Request request = new Request.Builder()
                 .addHeader("Accept", "application/json")
                 .url(url)
