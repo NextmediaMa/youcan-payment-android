@@ -2,7 +2,6 @@ package com.youcanPay;
 
 import com.youcanPay.interfaces.PayCallBackImpl;
 import com.youcanPay.models.YCPayCardInformation;
-import com.youcanPay.services.YCPaymentCallBack;
 import com.youcanPay.models.YCPayResult;
 import com.youcanPay.models.YCPayToken;
 import com.youcanPay.task.YCPayLoad3DSPageTask;
@@ -17,7 +16,7 @@ public class YCPay {
     private boolean isSandboxMode = false;
     public PayCallBackImpl payCallBack;
     public YCPaymentCallBack ycPaymentCallBack = new YCPaymentCallBack();
-    ViewModelPay viewModelPay = new ViewModelPay();
+    private final ViewModelPay viewModelPay = new ViewModelPay();
 
     public YCPay(String pubKey, String tokenId) {
         this.token = new YCPayToken(tokenId, pubKey);

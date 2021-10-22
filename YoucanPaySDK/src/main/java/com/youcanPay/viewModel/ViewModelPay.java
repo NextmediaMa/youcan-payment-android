@@ -1,11 +1,11 @@
 package com.youcanPay.viewModel;
 
-import com.youcanPay.api.ApiProvider;
+import com.youcanPay.api.ApiProviderPay;
 import com.youcanPay.interfaces.PayCallBackImpl;
 import com.youcanPay.models.YCPayCardInformation;
 import com.youcanPay.models.YCPayResult;
 import com.youcanPay.models.YCPayToken;
-import com.youcanPay.services.Services;
+import com.youcanPay.services.ApiServices;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,14 +14,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.youcanPay.config.YCPayConfig.UNEXPECTED_ERROR;
+
 public class ViewModelPay {
-    ApiProvider apiProvider = Services.getClient().create(ApiProvider.class);
+    ApiProviderPay apiProvider = ApiServices.getClient().create(ApiProviderPay.class);
 
     public void callPay(YCPayCardInformation cardInformation, PayCallBackImpl payCallBack, YCPayToken token) {
-        apiProvider = Services.getClient().create(ApiProvider.class);
 
         HashMap<String, String> body = cardInformation.toHashMap();
-        body.put("token_id", token.getTransactionId());
+        body.put("token_id", token.getId());
         body.put("pub_key", token.getPubKey());
         body.put("is_mobile", "1");
 
@@ -31,23 +32,24 @@ public class ViewModelPay {
             @Override
             public void onResponse(Call<YCPayResult> call, Response<YCPayResult> response) {
                 YCPayResult result;
+
                 if (response.isSuccessful()) {
                     result = response.body();
-
                     onPaySuccessful(result, payCallBack);
 
                     return;
                 }
 
-                onPayFailure(response, payCallBack);
+                onPayResponseError(response, payCallBack);
             }
 
             @Override
             public void onFailure(Call<YCPayResult> call, Throwable t) {
-                payCallBack.onPayFailure(t.getLocalizedMessage());
+                payCallBack.onPayFailure(UNEXPECTED_ERROR);
             }
         });
     }
+
 
     void onPaySuccessful(YCPayResult result, PayCallBackImpl payCallBack) {
         if (!result.redirectUrl.equals("") && !result.returnUrl.equals("")) {
@@ -61,7 +63,7 @@ public class ViewModelPay {
         }
     }
 
-    void onPayFailure(Response<YCPayResult> response, PayCallBackImpl payCallBack) {
+    void onPayResponseError(Response<YCPayResult> response, PayCallBackImpl payCallBack) {
         String errorBody = "";
 
         try {

@@ -13,17 +13,20 @@ public class YCPayBalanceResult {
     private int status;
     @SerializedName("created_at")
     private String createdAt;
+    @SerializedName("message")
     private String messageError = "";
 
     public YCPayBalanceResult resultFromJson(String json) {
-        Gson gson = new Gson();
         YCPayBalanceResult result;
+
         try {
+            Gson gson = new Gson();
             result = gson.fromJson(json, YCPayBalanceResult.class);
         } catch (Exception e) {
             e.printStackTrace();
             result = null;
         }
+
         return result;
     }
 

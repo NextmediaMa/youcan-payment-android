@@ -22,11 +22,10 @@ public class YCPayResult {
     public String listenUrl = "";
 
     public YCPayResult resultFromJson(String json) {
-
-        Gson gson = new Gson();
         YCPayResult result;
 
         try {
+            Gson gson = new Gson();
             result = gson.fromJson(json, YCPayResult.class);
         } catch (Exception e) {
             e.printStackTrace();

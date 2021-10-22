@@ -15,12 +15,12 @@ import com.youcanPay.models.YCPayResult;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import static com.youcanPay.config.YCPayConfig.UNEXPECTED_ERROR;
 import static com.youcanPay.config.YCPayConfig.YCP_TAG;
 
 public class YCPayWebView extends WebView {
 
     private String listenerUrl;
-
     YCPayWebViewCallBackImpl webViewListener;
 
     public void setWebViewListener(YCPayWebViewCallBackImpl webViewListener) {
@@ -47,31 +47,25 @@ public class YCPayWebView extends WebView {
             public void onPageFinished(WebView view, String url) {
                 Log.e(YCP_TAG, url);
 
+                if (webViewListener == null) {
+                    return;
+                }
+
                 try {
                     if (url.contains("is_success=0")) {
                         HashMap<String, String> urlData = getListenUrlResult(url);
-
-                        if (webViewListener != null) {
-                            webViewListener.onPayFailure(urlData.get("message"));
-                        }
+                        webViewListener.onPayFailure(urlData.get("message"));
 
                         return;
                     }
 
                     if (url.contains("is_success=1")) {
-                        if (webViewListener != null) {
-                            webViewListener.onPaySuccess();
-                        }
-
-                        return;
+                        webViewListener.onPaySuccess();
                     }
 
-                    return;
                 } catch (Exception exception) {
                     exception.printStackTrace();
-                    if (webViewListener != null) {
-                        webViewListener.onPayFailure("3Ds: error has occurred");
-                    }
+                    webViewListener.onPayFailure("3Ds: " + UNEXPECTED_ERROR);
                 }
             }
         });

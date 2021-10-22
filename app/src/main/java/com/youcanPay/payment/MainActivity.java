@@ -25,23 +25,15 @@ import java.util.HashMap;
 import static com.youcanPay.config.YCPayConfig.YCP_TAG;
 
 public class MainActivity extends AppCompatActivity {
+
     private YCPayWebView ycPayWebView;
-    Button button;
-    ProgressDialog progressBar;
+    private Button button;
+    private ProgressDialog progressBar;
 
-    URL balanceCallBackUrl;
-    String sellerToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd3d3LmNhbnNoaXB5LmNvbVwvYXBpXC9zZWxsZXJzXC9hdXRoXC9sb2dpbiIsImlhdCI6MTYzMjQxNzAzMSwiZXhwIjoxNjM1MDA5MDMxLCJuYmYiOjE2MzI0MTcwMzEsImp0aSI6InlIYkRoS295enFWWGpNakkiLCJzdWIiOiIzYjMyNzIxMS0yYjllLTRlOGEtYjE1MC0zMjc1OGY0OWNkYmUiLCJwcnYiOiJjMDk5ODBjZTRkYjM1YzQ4NjM2YjFkYzZiYzQwZGZiMGRkMWFlNWU0IiwidXNlciI6eyJpZCI6IjNiMzI3MjExLTJiOWUtNGU4YS1iMTUwLTMyNzU4ZjQ5Y2RiZSIsImZ1bGxfbmFtZSI6ImFiZGVsbWppZCBzZWxsZXIiLCJwaG9uZSI6IjIxMjYxMDU3MzM0MiJ9fQ.DiaWcfwF6phfszManEo9ZOvMUEIDzrP0kkZs2kVNx60";
+    private PayCallBackImpl onPayListener;
 
-    HashMap<String, String> header = new HashMap<String, String>() {{
-        put("Accept", "application/json");
-        put("Authorization", "Bearer " + sellerToken);
-    }};
-
-    YCPaymentCallBakParams ycPaymentCallBakParams;
-    PayCallBackImpl onPayListener;
-
-    YCPayCardInformation cardInformation;
-    YCPay ycPay = new YCPay("pub_40526e71-75b8-4258-a898-b0a44c53", "21a319e5-d4a0-4d4b-b51f-e8888ccd3ba3");
+    private YCPayCardInformation cardInformation;
+    private YCPay ycPay = new YCPay("pub_40526e71-75b8-4258-a898-b0a44c53", "6017f6b1-0610-46ec-ba0c-034eb31139da");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initWebViewListener() {
         ycPayWebView.setWebViewListener(new YCPayWebViewCallBackImpl() {
-
             @Override
             public void onPaySuccess() {
                 Toast.makeText(MainActivity.this, "PaySuccess 3D", Toast.LENGTH_LONG).show();
@@ -97,8 +88,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initYCPaymentHandler() throws MalformedURLException {
         // create BalanceCallBak Params
-        balanceCallBackUrl = new URL("https://preprod.allomystar.com/api/sellers/payment/callback");
-        ycPaymentCallBakParams = new YCPaymentCallBakParams(header);
+        String sellerToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcHJlcHJvZC5hbGxvbXlzdGFyLmNvbVwvYXBpXC9jZWxlYnJpdGllc1wvYWltYW4uemluZVwvc2hvdXRvdXQiLCJpYXQiOjE2MzQyMDYzMDQsImV4cCI6MTYzNjc5ODMwNCwibmJmIjoxNjM0MjA2MzA0LCJqdGkiOiJMeE9VQjNmaFVPVGZYdmp6Iiwic3ViIjoyMTA0LCJwcnYiOiJjZmJkODY1NTlkNWQ3ZDk2YmQ3NTc4Yjc5YWNmNWE1ZTQxNDE1MzExIiwidXNlciI6eyJpZCI6MjEwNCwiZmlyc3RfbmFtZSI6InlvdW5lcyIsImxhc3RfbmFtZSI6InJhZmllIiwicGhvbmUiOiIwNjc2NDYxNjAxIn19.aroFZ5yHQu4iUMf9LoCTQDtOOKiQ1kKBtI24GPwCDdM";
+        HashMap<String, String> header = new HashMap<String, String>() {{
+            put("Accept", "application/json");
+            put("Authorization", "Bearer " + sellerToken);
+        }};
+        URL balanceCallBackUrl = new URL("https://preprod.allomystar.com/api/payment/callback/");
+        YCPaymentCallBakParams ycPaymentCallBakParams = new YCPaymentCallBakParams(header);
+
         ycPay.ycPaymentCallBack.create(balanceCallBackUrl, ycPaymentCallBakParams);
     }
 
@@ -146,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void onPayPressed() {
         try {
-          // new TestClient(onPayListener,this,).call();
             ycPay.pay(cardInformation, onPayListener);
             progressBar.show();
         } catch (Exception e) {

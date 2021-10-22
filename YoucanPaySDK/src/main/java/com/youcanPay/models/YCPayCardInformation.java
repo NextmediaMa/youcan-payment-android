@@ -1,6 +1,7 @@
 package com.youcanPay.models;
 
 import java.util.HashMap;
+
 public class YCPayCardInformation {
 
     private String cardHolderName = "";

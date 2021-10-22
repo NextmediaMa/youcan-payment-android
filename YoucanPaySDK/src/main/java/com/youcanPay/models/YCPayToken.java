@@ -7,7 +7,7 @@ public class YCPayToken {
     private String pubKey = "";
 
     public YCPayToken(String transactionId, String pubKey) {
-        this.transactionId = transactionId;
+        this.id = transactionId;
         this.pubKey = pubKey;
     }
 

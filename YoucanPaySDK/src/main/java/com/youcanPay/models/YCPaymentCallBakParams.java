@@ -14,10 +14,6 @@ public class YCPaymentCallBakParams {
         return header;
     }
 
-    public void setHeader(HashMap<String, String> header) {
-        this.header = header;
-    }
-
     @Override
     public String toString() {
         return "YCPayBalanceCallBakParams{" +
