@@ -1,5 +1,6 @@
 <p align="center"><a href="https://pay.youcan.shop" target="_blank"><img src="https://pay.youcan.shop/images/ycpay-logo.svg" width="400"></a></p>
 
+[![](https://jitpack.io/v/NextmediaMa/youcan_payment_android.svg)](https://jitpack.io/#NextmediaMa/youcan_payment_android)
 
 The YCPayment Android SDK makes it quick and easy to build an excellent payment experience in your Android app. We provide a powerful and customizable YCPayWebView that can be used to handle 3DS step and build a fully custom experience.
 ## Requirements :
