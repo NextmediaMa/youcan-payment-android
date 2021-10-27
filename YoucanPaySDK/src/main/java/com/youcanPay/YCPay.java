@@ -60,8 +60,8 @@ public class YCPay {
             throw new Exception("Null Exception: cardInformation is null");
         }
 
-        if (!cardInformation.isDateValid()) {
-            throw new Exception("cardInformation Exception: Invalid date");
+        if (!cardInformation.isCardValid()) {
+            throw new Exception("cardInformation Exception: Invalid card data");
         }
 
         Log.e(YCP_TAG, "isSandboxMode: YC PAY " + this.isSandboxMode);

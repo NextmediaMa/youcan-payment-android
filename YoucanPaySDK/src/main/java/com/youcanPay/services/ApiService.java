@@ -64,7 +64,12 @@ public class ApiService implements Callback<YCPayResult> {
 
         if (result.success) {
             payCallBack.onSuccess(result.transactionId);
+
+            return;
+
         }
+
+        payCallBack.onFailure(UNEXPECTED_ERROR);
     }
 
     private void onPayResponseError(Response<YCPayResult> response, PayCallbackImpl payCallBack) {

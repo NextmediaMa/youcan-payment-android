@@ -100,7 +100,7 @@ public class YCPayWebView extends WebView {
         this.returnUrl = result.returnUrl;
         Log.e(YCP_TAG, "isSandboxMode: webView " + isSandboxMode);
 
-        if (!isSandboxMode) {
+        if (isSandboxMode) {
             this.loadUrl(result.redirectUrl);
 
             return;

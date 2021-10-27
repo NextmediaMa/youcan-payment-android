@@ -89,14 +89,14 @@ public class MainActivity extends AppCompatActivity implements PayCallbackImpl {
 
     private void initYCPay() {
         // Here u have to call your initializer to get your token id
-        this.ycPay = new YCPay(this, "pub_sandbox_2448476e-f9ec-4632-9a50-a7a23");
-        ycPay.setSandboxMode(true);
+        this.ycPay = new YCPay(this, "pub_key");
+        ycPay.setSandboxMode(false);
     }
 
     private void onPayPressed() {
         try {
             getCardInfo();
-            this.ycPay.pay("0a485061-b9be-426f-a265-c67e4e97d023", cardInformation, this);
+            this.ycPay.pay("token_id", cardInformation, this);
             showProgressDialog("waiting");
             hideKeyboard(this);
         } catch (Exception e) {
