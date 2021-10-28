@@ -36,7 +36,6 @@ allprojects {
 dependencies {
 	  implementation 'com.github.NextmediaMa:youcan_payment_android:Tag'
 }
-
  ```
  ### Set up Payment :
  
@@ -58,7 +57,11 @@ PayCallbackImpl onPayListener = new PayCallbackImpl() {
             }
         };
         
-        
+ ```
+### Sandbox
+YouCan Pay [Sandbox](https://pay.youcan.shop/docs#sandbox) offers an easy way for developers to test YouCan Pay in their test environment.
+
+```java
 // setting the sandbox mode
 ycPay.setSandboxMode(true)
 ```
