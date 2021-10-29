@@ -13,7 +13,6 @@ import com.youcanPay.interfaces.PayCallbackImpl;
 import com.youcanPay.interfaces.YCPayWebViewCallbackImpl;
 import com.youcanPay.models.YCPayResult;
 import com.youcanPay.utils.Strings;
-import com.youcanPay.youcanpay.R;
 
 import java.util.HashMap;
 import java.util.regex.Pattern;

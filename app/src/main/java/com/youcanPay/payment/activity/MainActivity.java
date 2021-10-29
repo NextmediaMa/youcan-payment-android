@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements PayCallbackImpl {
         this.button.setOnClickListener(v -> onPayPressed());
     }
 
-
     /**
      * inti view component
      */
@@ -107,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements PayCallbackImpl {
         String date = this.expiryDateInput.getText().toString();
         String cvv = this.cvvInput.getText().toString();
 
-        if (name.equals("") || cardNum.equals("") || date.equals("") || cvv.equals("")) {
+        if (name.equals("") || cardNum.equals("") || date.length() < 5 || cvv.equals("")) {
             Toast.makeText(this, "Please set card information", Toast.LENGTH_LONG).show();
 
             return;
