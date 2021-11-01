@@ -11,19 +11,19 @@ import androidx.annotation.Nullable;
 
 import com.youcanPay.interfaces.PayCallbackImpl;
 import com.youcanPay.interfaces.YCPayWebViewCallbackImpl;
-import com.youcanPay.models.YCPayResult;
+import com.youcanPay.models.YCPayResponse;
 import com.youcanPay.utils.Strings;
 
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import static com.youcanPay.config.YCPayConfig.YCP_TAG;
+import static com.youcanPay.config.YCPayConfig.locale;
 
 public class YCPayWebView extends WebView {
     private String returnUrl = "";
     private PayCallbackImpl webViewListener;
     private YCPayWebViewCallbackImpl onFinishCallback;
-    private String local;
 
     public void setWebViewListener(PayCallbackImpl webViewListener) {
         this.webViewListener = webViewListener;
@@ -56,10 +56,10 @@ public class YCPayWebView extends WebView {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-
                 if (webViewListener == null) {
                     return;
                 }
+
                 Log.e(YCP_TAG, "onPageFinished: " + url);
                 try {
                     if (url.contains(returnUrl) && url.contains("is_success=0")) {
@@ -80,7 +80,7 @@ public class YCPayWebView extends WebView {
                 } catch (Exception exception) {
                     exception.printStackTrace();
 
-                    webViewListener.onFailure(Strings.get("unexpected_error_occurred", local));
+                    webViewListener.onFailure(Strings.get("unexpected_error_occurred", locale));
                     onFinishCallback.onFinish();
                 }
             }
@@ -91,9 +91,8 @@ public class YCPayWebView extends WebView {
         super(context, attrs, defStyleAttr);
     }
 
-    public void loadResult(YCPayResult result, String local) {
+    public void loadResult(YCPayResponse result) {
         this.returnUrl = result.returnUrl;
-        this.local = local;
 
         this.loadUrl(result.redirectUrl);
     }

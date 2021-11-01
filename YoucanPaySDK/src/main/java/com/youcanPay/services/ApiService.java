@@ -5,9 +5,11 @@ import android.content.Context;
 import com.youcanPay.api.ApiProviderPay;
 import com.youcanPay.interfaces.PayCallbackImpl;
 import com.youcanPay.models.YCPayCardInformation;
-import com.youcanPay.models.YCPayResult;
+import com.youcanPay.models.YCPayResponse;
 import com.youcanPay.utils.Strings;
-import com.youcanPay.view.YCPayBottomDialog;
+import com.youcanPay.view.YCPayBottomSheet;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,19 +22,32 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.youcanPay.config.YCPayConfig.API_URL;
 import static com.youcanPay.config.YCPayConfig.API_URL_SANDBOX;
+import static com.youcanPay.config.YCPayConfig.locale;
 
-public class ApiService implements Callback<YCPayResult> {
-    private PayCallbackImpl payCallback;
+public class ApiService implements Callback<YCPayResponse> {
+    private final PayCallbackImpl payCallback;
     private final Context context;
-    private final String locale;
     private final boolean isSandboxMode;
     private final ApiProviderPay apiProvider;
+    private final YCPayCardInformation cardInformation;
+    private final String pubKey;
+    private final String tokenId;
 
-    public ApiService(Context context, boolean isSandboxMode, String locale) {
+    public ApiService(
+            Context context,
+            boolean isSandboxMode,
+            YCPayCardInformation cardInformation,
+            PayCallbackImpl payCallback,
+            String pubKey,
+            String tokenId
+    ) {
         this.context = context;
         this.isSandboxMode = isSandboxMode;
+        this.cardInformation = cardInformation;
+        this.payCallback = payCallback;
+        this.pubKey = pubKey;
+        this.tokenId = tokenId;
         this.apiProvider = getClient().create(ApiProviderPay.class);
-        this.locale = locale;
     }
 
     private Retrofit getClient() {
@@ -42,20 +57,26 @@ public class ApiService implements Callback<YCPayResult> {
                 .build();
     }
 
-    public void pay(YCPayCardInformation cardInformation, PayCallbackImpl payCallBack, String pubKey, String tokenId) {
-        HashMap<String, String> body = cardInformation.toHashMap();
-        body.put("token_id", tokenId);
-        body.put("pub_key", pubKey);
+    public void pay() throws Exception {
+        if (this.payCallback == null) {
+            throw new Exception("Null Exception: Pay Callback is null");
+        }
+
+        if (this.cardInformation == null) {
+            throw new Exception("Null Exception: cardInformation is null");
+        }
+
+        HashMap<String, String> body = this.cardInformation.toHashMap();
+        body.put("token_id", this.tokenId);
+        body.put("pub_key", this.pubKey);
         body.put("is_mobile", "1");
 
-        this.payCallback = payCallBack;
-
-        Call<YCPayResult> call = this.apiProvider.pay(body, locale);
+        Call<YCPayResponse> call = this.apiProvider.pay(body, locale);
 
         call.enqueue(this);
     }
 
-    private void onPaySuccessful(YCPayResult result, PayCallbackImpl payCallBack) {
+    private void onPaySuccessful(YCPayResponse result) {
         if (!result.redirectUrl.equals("") && !result.returnUrl.equals("")) {
             show3DsSheet(this.context, result);
 
@@ -63,17 +84,16 @@ public class ApiService implements Callback<YCPayResult> {
         }
 
         if (result.success) {
-            payCallBack.onSuccess(result.transactionId);
+            this.payCallback.onSuccess(result.transactionId);
 
             return;
 
         }
 
-        payCallBack.onFailure(Strings.get("unexpected_error_occurred", this.locale));
+        this.payCallback.onFailure(Strings.get("unexpected_error_occurred", locale));
     }
 
-    private void onPayResponseError(Response<YCPayResult> response, PayCallbackImpl payCallBack) {
-
+    private void onPayResponseError(Response<YCPayResponse> response) {
         String errorBody = "";
 
         try {
@@ -82,35 +102,37 @@ public class ApiService implements Callback<YCPayResult> {
             e.printStackTrace();
         }
 
-        YCPayResult result = new YCPayResult().resultFromJson(errorBody);
+        YCPayResponse result = null;
+        try {
+            result = new YCPayResponse().resultFromJson(errorBody);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        payCallBack.onFailure(result.message);
+        this.payCallback.onFailure(result.message);
     }
 
     @Override
-    public void onResponse(Call<YCPayResult> call, Response<YCPayResult> response) {
-        YCPayResult result;
+    public void onResponse(@NotNull Call<YCPayResponse> call, Response<YCPayResponse> response) {
+        YCPayResponse result;
 
         if (response.isSuccessful()) {
             result = response.body();
-            onPaySuccessful(result, payCallback);
+            onPaySuccessful(result);
 
             return;
         }
 
-        onPayResponseError(response, payCallback);
+        onPayResponseError(response);
     }
 
     @Override
-    public void onFailure(Call<YCPayResult> call, Throwable t) {
-        payCallback.onFailure(Strings.get("unexpected_error_occurred", this.locale));
+    public void onFailure(@NotNull Call<YCPayResponse> call, @NotNull Throwable t) {
+        payCallback.onFailure(Strings.get("unexpected_error_occurred", locale));
     }
 
-    private void show3DsSheet(Context context, YCPayResult ycPayResult) {
-        YCPayBottomDialog bottomDialog = new YCPayBottomDialog.Builder(context)
-                .setData(ycPayResult, this.payCallback, this.locale)
-                .build();
-
+    private void show3DsSheet(Context context, YCPayResponse ycPayResult) {
+        YCPayBottomSheet bottomDialog = new YCPayBottomSheet(context, ycPayResult, this.payCallback);
         bottomDialog.show();
     }
 
