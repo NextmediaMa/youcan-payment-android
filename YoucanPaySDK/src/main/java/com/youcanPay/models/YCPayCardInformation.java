@@ -2,6 +2,8 @@ package com.youcanPay.models;
 
 import android.text.TextUtils;
 
+import com.youcanPay.exception.CardInformationException;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,15 +11,24 @@ import java.util.HashMap;
 public class YCPayCardInformation {
     private String cardHolderName = "";
     private String cardNumber = "";
-    private String expireDateYears = "";
+    private String expireDateYear = "";
     private String expireDateMonth = "";
     private String cvv = "";
 
-    public YCPayCardInformation(String cardHolderName, String cardNumber, String expireDateMonth, String expireDateYears, String cvv) {
+    public YCPayCardInformation
+            (
+                    String cardHolderName,
+                    String cardNumber,
+                    String expireDateMonth,
+                    String expireDateYear,
+                    String cvv
+            ) throws Exception {
+        isCardValid(cardHolderName, cardNumber, expireDateMonth, expireDateYear, cvv);
+
         this.cardHolderName = cardHolderName;
         this.cardNumber = cardNumber;
         this.expireDateMonth = expireDateMonth;
-        this.expireDateYears = expireDateYears;
+        this.expireDateYear = expireDateYear;
         this.cvv = cvv;
     }
 
@@ -29,8 +40,8 @@ public class YCPayCardInformation {
         return cardNumber;
     }
 
-    public String getExpireDateYears() {
-        return expireDateYears;
+    public String getExpireDateYear() {
+        return expireDateYear;
     }
 
     public String getExpireDateDay() {
@@ -38,7 +49,7 @@ public class YCPayCardInformation {
     }
 
     public String getExpireDate() {
-        return expireDateMonth + "/" + expireDateYears;
+        return expireDateMonth + "/" + expireDateYear;
     }
 
     public String getCvv() {
@@ -63,37 +74,38 @@ public class YCPayCardInformation {
     /**
      * check if card is valid
      *
-     * @return valid or not [boolean]
      */
-    public boolean isCardValid() {
-        if (this.cardHolderName.equals("")) {
-            return false;
+    private void isCardValid(String cardHolderName,
+                             String cardNumber,
+                             String expireDateMonth,
+                             String expireDateYear,
+                             String cvv) throws Exception {
+        if (cardHolderName.equals("")) {
+            throw new CardInformationException("Name holder required");
         }
 
-        if (!TextUtils.isDigitsOnly(this.cardNumber)) {
-            return false;
+        if (!TextUtils.isDigitsOnly(cardNumber)) {
+            throw new CardInformationException("Card Number must be Number");
         }
 
-        if (!TextUtils.isDigitsOnly(this.cvv)) {
-            return false;
+        if (!TextUtils.isDigitsOnly(cvv)) {
+            throw new CardInformationException("CVV must be Number");
         }
 
-        if (!this.isDateValid()) {
-            return false;
+        if (!this.isDateValid(expireDateMonth,expireDateYear)) {
+            throw new CardInformationException("Date Invalid");
         }
-
-        return true;
     }
 
-    private boolean isDateValid() {
+    private boolean isDateValid(String expireDateMonth, String expireDateYear) throws Exception {
         int expireMonth = 0;
         int expireYears = 0;
 
         try {
-            expireMonth = Integer.parseInt(this.expireDateMonth);
-            expireYears = Integer.parseInt(this.expireDateYears);
+            expireMonth = Integer.parseInt(expireDateMonth);
+            expireYears = Integer.parseInt(expireDateYear);
         } catch (Exception e) {
-            return false;
+            throw new CardInformationException("Date Invalid");
         }
 
         if (expireMonth > 12 || expireMonth <= 0) {

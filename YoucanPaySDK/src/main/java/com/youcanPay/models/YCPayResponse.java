@@ -3,7 +3,7 @@ package com.youcanPay.models;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-public class YCPayResult {
+public class YCPayResponse {
     public boolean success = false;
     @SerializedName("message")
     public String message = "";
@@ -13,18 +13,15 @@ public class YCPayResult {
     public String returnUrl = "";
     @SerializedName("redirect_url")
     public String redirectUrl = "";
-    @SerializedName("listen_url")
-    public String listenUrl = "";
 
-    public YCPayResult resultFromJson(String json) {
-        YCPayResult result;
+    public YCPayResponse resultFromJson(String json) throws Exception {
+        YCPayResponse result;
 
         try {
             Gson gson = new Gson();
-            result = gson.fromJson(json, YCPayResult.class);
+            result = gson.fromJson(json, YCPayResponse.class);
         } catch (Exception e) {
-            e.printStackTrace();
-            result = new YCPayResult();
+            throw new Exception("Invalid response");
         }
 
         return result;
@@ -38,7 +35,6 @@ public class YCPayResult {
                 ", transactionId='" + transactionId + '\'' +
                 ", callBackUrl='" + returnUrl + '\'' +
                 ", redirectUrl='" + redirectUrl + '\'' +
-                ", listenUrl='" + listenUrl + '\'' +
                 '}';
     }
 }
