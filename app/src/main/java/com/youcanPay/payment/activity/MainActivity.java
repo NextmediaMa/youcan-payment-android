@@ -90,17 +90,19 @@ public class MainActivity extends AppCompatActivity implements PayCallbackImpl {
 
     private void onPayPressed() {
         try {
-            getCardInfo();
+             getCardInfo();
 
-            this.ycPay.pay("token_id", this.cardInformation, this);
+            this.ycPay.pay("tokenID", this.cardInformation, this);
             showProgressDialog("waiting");
             hideKeyboard(this);
         } catch (Exception e) {
             e.printStackTrace();
+
+            this.onFailure(e.getMessage());
         }
     }
 
-    private void getCardInfo() {
+    private void getCardInfo() throws Exception {
         String name = this.nameHolderInput.getText().toString();
         String cardNum = this.cardNumInput.getText().toString();
         String date = this.expiryDateInput.getText().toString();
