@@ -32,8 +32,9 @@ public class YCPay {
         this.isSandboxMode = isSandboxMode;
     }
 
-    public void pay(String tokenId, YCPayCardInformation cardInformation, PayCallbackImpl payCallBack) throws Exception {
-        ApiService apiService = new ApiService(context, this.isSandboxMode, cardInformation, payCallBack, this.pubKey, tokenId);
-        apiService.pay();
+    public void pay(String tokenId, YCPayCardInformation cardInformation,
+                    PayCallbackImpl payCallBack) throws Exception {
+        ApiService apiService = new ApiService(this.isSandboxMode);
+        apiService.pay(context, this.pubKey, tokenId, cardInformation, payCallBack);
     }
 }

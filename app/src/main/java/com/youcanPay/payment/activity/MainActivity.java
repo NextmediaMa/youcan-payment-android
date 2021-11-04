@@ -90,9 +90,11 @@ public class MainActivity extends AppCompatActivity implements PayCallbackImpl {
 
     private void onPayPressed() {
         try {
-             getCardInfo();
+            this.cardInformation = new YCPayCardInformation("name-holder", "1234123412341234", "12",
+                    "24", "123");
 
-            this.ycPay.pay("tokenID", this.cardInformation, this);
+            this.ycPay.pay("token_id", this.cardInformation,
+                    this);
             showProgressDialog("waiting");
             hideKeyboard(this);
         } catch (Exception e) {

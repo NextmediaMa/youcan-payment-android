@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.youcanPay.interfaces.PayCallbackImpl;
 import com.youcanPay.interfaces.YCPayWebViewCallbackImpl;
-import com.youcanPay.models.YCPayResponse;
+import com.youcanPay.models.YCPResponse3ds;
 import com.youcanPay.utils.Strings;
 
 import java.util.HashMap;
@@ -62,7 +62,7 @@ public class YCPayWebView extends WebView {
 
                 Log.e(YCP_TAG, "onPageFinished: " + url);
                 try {
-                    if (url.contains(returnUrl) && url.contains("is_success=0")) {
+                    if (url.contains(returnUrl) && url.contains("success=0")) {
                         HashMap<String, String> urlData = getListenUrlResult(url);
 
                         webViewListener.onFailure(urlData.get("message"));
@@ -70,7 +70,7 @@ public class YCPayWebView extends WebView {
                         return;
                     }
 
-                    if (url.contains(returnUrl) && url.contains("is_success=1")) {
+                    if (url.contains(returnUrl) && url.contains("success=1")) {
                         HashMap<String, String> urlData = getListenUrlResult(url);
 
                         webViewListener.onSuccess(urlData.get("transaction_id"));
@@ -91,10 +91,10 @@ public class YCPayWebView extends WebView {
         super(context, attrs, defStyleAttr);
     }
 
-    public void loadResult(YCPayResponse result) {
-        this.returnUrl = result.returnUrl;
+    public void loadResult(YCPResponse3ds result) {
+        this.returnUrl = result.getReturnUrl();
 
-        this.loadUrl(result.redirectUrl);
+        this.loadUrl(result.getRedirectUrl());
     }
 
     private HashMap<String, String> getListenUrlResult(String url) {
