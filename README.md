@@ -34,7 +34,7 @@ allprojects {
 <b>Step 2:</b> Add the dependency
 ```gradel
 dependencies {
-	  implementation 'com.github.NextmediaMa:youcan_payment_android:Tag'
+	implementation 'com.github.NextmediaMa:youcan_payment_android:Tag'
 }
  ```
  ### Set up Payment :
@@ -43,7 +43,7 @@ dependencies {
 // init YCPay
 YCPay ycPay = new YCPay(this, "pub_key");
 // init Card Informtaion
-YCPayCardInformation cardInformation = new YCPayCardInformation("card-holder-name", "1234123412341234", "12/34", "123");
+YCPayCardInformation cardInformation = new YCPayCardInformation("card-holder-name", "1234123412341234", "12", "22", "123");
 // init onPayCallback
 PayCallbackImpl onPayListener = new PayCallbackImpl() {
             @Override
@@ -55,7 +55,7 @@ PayCallbackImpl onPayListener = new PayCallbackImpl() {
             public void onFailure(String message) {
                 // ... pay Failure with reason 
             }
-        };
+};
         
  ```
 ### Sandbox
@@ -65,13 +65,13 @@ YouCan Pay [Sandbox](https://pay.youcan.shop/docs#sandbox) offers an easy way fo
 // setting the sandbox mode
 ycPay.setSandboxMode(true)
 ```
-Now You can effect your payment 💸 💸 with :
+Now You can effect your payment with :
 
 ```java
 // effect your payment with :
-   try {
-       ycPay.pay("token_id", cardInformation, onPayListener);;
-   } catch (Exception e) {
-      e.printStackTrace();
-   }
+try {
+	ycPay.pay("token_id", cardInformation, onPayListener);;
+} catch (Exception e) {
+	e.printStackTrace();
+}
 ```
