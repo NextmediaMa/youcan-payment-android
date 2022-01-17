@@ -1,0 +1,3 @@
+include ':YoucanPaySDK'
+include ':app'
+rootProject.name = "YoucanPaymentAndroid"

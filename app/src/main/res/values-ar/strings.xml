@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">YoucanPay</string>
+    <string name="card_holder_name">إسم صاحب البطاقة</string>
+    <string name="card_number">رقم البطاقة</string>
+    <string name="expiry_date">تاريخ انتهاء الصلاحية</string>
+    <string name="cvv">cvv</string>
+    <string name="pay">دفع</string>
+</resources>
