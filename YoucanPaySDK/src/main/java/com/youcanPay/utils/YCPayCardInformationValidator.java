@@ -27,10 +27,6 @@ public class YCPayCardInformationValidator {
         if (!TextUtils.isDigitsOnly(cardInformation.getCvv())) {
             throw new YCPayInvalidArgumentException("CVV must be Number");
         }
-
-        if (!isDateValid(cardInformation.getExpireDateMonth(), cardInformation.getExpireDateYear())) {
-            throw new YCPayInvalidArgumentException("Date Invalid");
-        }
     }
 
     static private boolean isDateValid(String expireDateMonth, String expireDateYear) throws YCPayInvalidArgumentException {

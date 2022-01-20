@@ -60,12 +60,9 @@ public class YCPayWebView extends WebView {
                     return;
                 }
 
-                Log.e(YCP_TAG, "onPageFinished: " + url);
-                Log.e(YCP_TAG, "returnUrl: " + returnUrl);
                 try {
                     if (url.contains(returnUrl) && url.contains("success=0")) {
                         HashMap<String, String> urlData = getListenUrlResult(url);
-                        Log.e(YCP_TAG+"_err", "onPageFinished: " + url);
 
                         webViewListener.onFailure(urlData.get("message"));
                         onFinishCallback.onFinish();

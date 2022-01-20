@@ -1,13 +1,11 @@
 package com.youcanPay.factories;
 
-import android.util.Log;
 
 import com.youcanPay.exception.YCPayInvalidDecodedJSONException;
 import com.youcanPay.exception.YCPayInvalidResponseException;
 import com.youcanPay.models.YCPResponse3ds;
 import com.youcanPay.models.YCPResponseCashPlus;
 import com.youcanPay.models.YCPResponseSale;
-import com.youcanPay.models.YCPayAccountConfig;
 import com.youcanPay.models.YCPayResponse;
 
 import org.json.JSONException;

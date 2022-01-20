@@ -1,5 +1,7 @@
 package com.youcanPay.networking;
 
+import android.util.Log;
+
 import com.youcanPay.api.YCPayApiProvider;
 import com.youcanPay.exception.YCPayInvalidArgumentException;
 import com.youcanPay.models.HttpResponse;
