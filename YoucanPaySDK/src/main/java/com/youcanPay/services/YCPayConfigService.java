@@ -1,7 +1,6 @@
 package com.youcanPay.services;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.youcanPay.exception.YCPayInvalidArgumentException;
@@ -20,15 +19,15 @@ import static com.youcanPay.config.YCPayConfig.API_URL;
 import static com.youcanPay.config.YCPayConfig.API_URL_SANDBOX;
 import static com.youcanPay.utils.YCPayLocale.getLocale;
 
-public class YCPayGetConfigService implements HttpCallBackImpl {
+public class YCPayConfigService implements HttpCallBackImpl {
     private final YCPayHTTPAdapter httpAdapter;
-    public YCPayAccountConfig ycPayAccountConfig = new YCPayAccountConfig();
-    private MutableLiveData<Boolean> isLoaded;
+    public MutableLiveData<YCPayAccountConfig> ycPayAccountConfigLiveData;
+    public YCPayAccountConfig accountConfig = new YCPayAccountConfig();
 
-    public YCPayGetConfigService(YCPayHTTPAdapter httpAdapter) {
+    public YCPayConfigService(YCPayHTTPAdapter httpAdapter) {
         this.httpAdapter = httpAdapter;
         this.httpAdapter.setHttpCallback(this);
-        this.isLoaded = new MutableLiveData<>();
+        this.ycPayAccountConfigLiveData = new MutableLiveData<>();
     }
 
     public void getAccountConfig(String pubKey) throws YCPayInvalidArgumentException {
@@ -46,23 +45,26 @@ public class YCPayGetConfigService implements HttpCallBackImpl {
         return httpAdapter.getSandboxMode() ? API_URL_SANDBOX + path : API_URL + path;
     }
 
-    public LiveData<Boolean> getIsLoaded() {
-        return this.isLoaded;
+    public LiveData<YCPayAccountConfig> getAccountConfig() {
+        return this.ycPayAccountConfigLiveData;
     }
 
     @Override
     public void onResponse(HttpResponse response) {
-        this.isLoaded.postValue(true);
         try {
-            this.ycPayAccountConfig = YCPAccountConfigFactory.getResponse(response.getBody());
+            accountConfig = YCPAccountConfigFactory.getResponse(response.getBody());
+            this.ycPayAccountConfigLiveData.postValue(accountConfig);
         } catch (JSONException | YCPayInvalidResponseException e) {
-            e.printStackTrace();
+            accountConfig.setMessage(e.getMessage());
+            this.onError(e.getMessage());
         }
     }
 
     @Override
     public void onError(String message) {
-        this.isLoaded.postValue(true);
+        YCPayAccountConfig accountConfig = new YCPayAccountConfig();
+        accountConfig.setMessage(message);
+        this.ycPayAccountConfigLiveData.postValue(accountConfig);
     }
 
 }

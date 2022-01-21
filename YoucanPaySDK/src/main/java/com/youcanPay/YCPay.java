@@ -13,7 +13,7 @@ import com.youcanPay.models.YCPayCardInformation;
 import com.youcanPay.networking.YCPayRetrofitHTTPAdapter;
 import com.youcanPay.services.YCPayApiService;
 import com.youcanPay.services.YCPayCashPlusService;
-import com.youcanPay.services.YCPayGetConfigService;
+import com.youcanPay.services.YCPayConfigService;
 
 import static com.youcanPay.utils.YCPayLocale.setLocale;
 
@@ -22,7 +22,7 @@ public class YCPay {
     private final Context context;
     private YCPayApiService apiService = new YCPayApiService(new YCPayRetrofitHTTPAdapter());
     private YCPayCashPlusService cashPushService = new YCPayCashPlusService(new YCPayRetrofitHTTPAdapter());
-    private YCPayGetConfigService ycPayGetConfigService = new YCPayGetConfigService(new YCPayRetrofitHTTPAdapter());
+    private YCPayConfigService ycPayGetConfigService = new YCPayConfigService(new YCPayRetrofitHTTPAdapter());
     private LiveData<Boolean> isConfigLoaded;
 
     public YCPay(
@@ -59,7 +59,7 @@ public class YCPay {
             YCPayCardInformation cardInformation,
             PayCallbackImpl payCallBack
     ) throws YCPayInvalidArgumentException, NullPointerException, YCPayInvalidPaymentMethodException {
-        if (!this.ycPayGetConfigService.ycPayAccountConfig.isAcceptsCashPlus()) {
+        if (!this.ycPayGetConfigService.accountConfig.isAcceptsCashPlus()) {
             throw new YCPayInvalidPaymentMethodException("Payment with Credit Card is Invalid for your account");
         }
 
@@ -76,7 +76,7 @@ public class YCPay {
             String tokenId,
             CashPlusCallbackImpl cashPlusCallback
     ) throws YCPayInvalidArgumentException, NullPointerException, YCPayInvalidPaymentMethodException {
-        if (!this.ycPayGetConfigService.ycPayAccountConfig.isAcceptsCashPlus()) {
+        if (!this.ycPayGetConfigService.accountConfig.isAcceptsCashPlus()) {
             throw new YCPayInvalidPaymentMethodException("Payment with CashPlus is Invalid for your account");
         }
 
@@ -89,18 +89,17 @@ public class YCPay {
 
     private void loadAccountConfig() {
         try {
-            this.isConfigLoaded = this.ycPayGetConfigService.getIsLoaded();
             this.ycPayGetConfigService.getAccountConfig(pubKey);
         } catch (YCPayInvalidArgumentException e) {
             e.printStackTrace();
         }
     }
 
-    public LiveData<Boolean> getIsConfigLoaded() {
-        return this.isConfigLoaded;
+    public LiveData<YCPayAccountConfig> getAccountConfigLiveData() {
+        return this.ycPayGetConfigService.getAccountConfig();
     }
 
     public YCPayAccountConfig getAccountConfig() {
-        return this.ycPayGetConfigService.ycPayAccountConfig;
+        return this.ycPayGetConfigService.accountConfig;
     }
 }
