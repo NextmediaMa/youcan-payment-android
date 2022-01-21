@@ -33,8 +33,11 @@ public class YCPAccountConfigFactory {
                 return ycPayAccountConfig;
             }
 
-            if(jsonObject.has("message") ){
+            if (jsonObject.has("message")) {
+                YCPayAccountConfig ycPayAccountConfig = new YCPayAccountConfig();
+                ycPayAccountConfig.setMessage(jsonObject.getString("message"));
 
+                return ycPayAccountConfig;
             }
 
         } catch (JSONException e) {
