@@ -3,6 +3,7 @@ package com.youcanPay.factories;
 
 import com.youcanPay.exception.YCPayInvalidDecodedJSONException;
 import com.youcanPay.exception.YCPayInvalidResponseException;
+import com.youcanPay.models.HttpResponse;
 import com.youcanPay.models.YCPResponse3ds;
 import com.youcanPay.models.YCPResponseCashPlus;
 import com.youcanPay.models.YCPResponseSale;
@@ -12,7 +13,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class YCPResponseFactory {
-    public static YCPayResponse getResponse(String json) throws YCPayInvalidResponseException, YCPayInvalidDecodedJSONException {
+    public static YCPayResponse getResponse(HttpResponse httpResponse)
+            throws YCPayInvalidResponseException, YCPayInvalidDecodedJSONException {
+        String json = httpResponse.getBody();
         JSONObject jsonObject;
 
         try {
@@ -46,6 +49,16 @@ public class YCPResponseFactory {
                         jsonObject.has("transaction_id") ? jsonObject.getString(
                                 "transaction_id") : "",
                         jsonObject.getString("token")
+                );
+            }
+
+            if(httpResponse.getStatusCode() == 422){
+                return new YCPResponseSale(
+                         "",
+                        false,
+                        jsonObject.has("message") ?
+                                jsonObject.getString("message") : "",
+                        422
                 );
             }
 

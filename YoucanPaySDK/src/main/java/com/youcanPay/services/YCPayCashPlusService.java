@@ -1,6 +1,5 @@
 package com.youcanPay.services;
 
-import android.content.Context;
 
 import com.youcanPay.exception.YCPayInvalidArgumentException;
 import com.youcanPay.exception.YCPayInvalidDecodedJSONException;
@@ -8,15 +7,11 @@ import com.youcanPay.exception.YCPayInvalidResponseException;
 import com.youcanPay.factories.YCPResponseFactory;
 import com.youcanPay.interfaces.CashPlusCallbackImpl;
 import com.youcanPay.interfaces.HttpCallBackImpl;
-import com.youcanPay.interfaces.PayCallbackImpl;
 import com.youcanPay.models.HttpResponse;
-import com.youcanPay.models.YCPResponse3ds;
 import com.youcanPay.models.YCPResponseCashPlus;
 import com.youcanPay.models.YCPResponseSale;
-import com.youcanPay.models.YCPayCardInformation;
 import com.youcanPay.models.YCPayResponse;
 import com.youcanPay.networking.YCPayHTTPAdapter;
-import com.youcanPay.view.YCPayBottomSheet;
 
 import java.util.HashMap;
 
@@ -72,7 +67,7 @@ public class YCPayCashPlusService implements HttpCallBackImpl {
         YCPayResponse result;
 
         try {
-            result = YCPResponseFactory.getResponse(response.getBody());
+            result = YCPResponseFactory.getResponse(response);
             if (!response.isSuccess()) {
                 this.cashPlusCallback.onFailure(((YCPResponseSale) result).getMessage());
 

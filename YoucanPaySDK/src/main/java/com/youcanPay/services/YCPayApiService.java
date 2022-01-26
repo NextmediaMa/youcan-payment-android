@@ -114,7 +114,7 @@ public class YCPayApiService implements HttpCallBackImpl {
     public void onResponse(HttpResponse response) {
         YCPayResponse result;
         try {
-            result = YCPResponseFactory.getResponse(response.getBody());
+            result = YCPResponseFactory.getResponse(response);
 
             if (result instanceof YCPResponse3ds) {
                 show3DsSheet(this.context, ((YCPResponse3ds) result));

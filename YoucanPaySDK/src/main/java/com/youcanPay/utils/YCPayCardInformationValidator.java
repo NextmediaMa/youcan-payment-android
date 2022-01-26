@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import com.youcanPay.exception.YCPayInvalidArgumentException;
 import com.youcanPay.models.YCPayCardInformation;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -27,35 +29,26 @@ public class YCPayCardInformationValidator {
         if (!TextUtils.isDigitsOnly(cardInformation.getCvv())) {
             throw new YCPayInvalidArgumentException("CVV must be Number");
         }
+
+        if (!isDateValid(cardInformation.getExpireDate())) {
+            throw new YCPayInvalidArgumentException("Date invalid");
+        }
     }
 
-    static private boolean isDateValid(String expireDateMonth, String expireDateYear) throws YCPayInvalidArgumentException {
-        int expireMonth = 0;
-        int expireYears = 0;
-
+    static private boolean isDateValid(String expireDate) throws YCPayInvalidArgumentException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/yy");
         try {
-            expireMonth = Integer.parseInt(expireDateMonth);
-            expireYears = Integer.parseInt(expireDateYear);
-        } catch (NumberFormatException e) {
-            throw new YCPayInvalidArgumentException("Date Invalid");
-        }
+            Date expire = simpleDateFormat.parse(expireDate);
+            Date now = new Date();
 
-        if (expireMonth > 12 || expireMonth <= 0) {
-            return false;
-        }
+            if(now.getMonth() == expire.getMonth() && now.getYear() == expire.getYear() ) {
+                return true;
+            }
 
-        Date date = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-
-        int years = cal.get(Calendar.YEAR) % 100;
-        int month = cal.get(Calendar.MONTH);
-
-        if (expireYears < years) {
-            return false;
-        }
-
-        if (expireYears == years && expireMonth > month) {
+            if (expire.before(new Date())) {
+                return false;
+            }
+        } catch (ParseException e) {
             return false;
         }
 
