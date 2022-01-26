@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements PayCallbackImpl, 
                 "pub-key",
                 "fr"
         );
-        this.ycPay.getIsConfigLoaded().observe(this, isLoaded -> { });
     }
 
     private void onPayPressed() throws YCPayInvalidArgumentException, YCPayInvalidPaymentMethodException {
