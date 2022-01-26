@@ -3,7 +3,7 @@
     package="com.youcanPay.youcanpay">
 
     <application>
-        <activity android:name="com.youcanPay.SimpleCustomBottomSheet" />
+
     </application>
 
 </manifest>
