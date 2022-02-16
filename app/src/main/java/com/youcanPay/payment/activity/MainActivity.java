@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements PayCallbackImpl, 
         // Here u have to call your initializer to get your token id
         this.ycPay = new YCPay(
                 this,
-                "pub-key",
+                "pub_153a9c44-59a2-490b-bce1-32f114b4",
                 "fr"
         );
     }
@@ -84,9 +84,10 @@ public class MainActivity extends AppCompatActivity implements PayCallbackImpl, 
                 "112"
         );
 
-        this.ycPay.payWithCashPlus(
-                "token-id",
-                // this.cardInformation,
+        // this.getCardInfo();
+        this.ycPay.payWithCard(
+                "1957841a-f669-49c7-8f5d-ddc0944fa0c0",
+                this.cardInformation,
                 this
         );
 
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements PayCallbackImpl, 
 
     private void getCardInfo() throws YCPayInvalidArgumentException {
         String name = this.nameHolderInput.getText().toString();
-        String cardNum = this.cardNumInput.getText().toString();
+        String cardNum = this.cardNumInput.getText().toString().replace(" ", "");
         String date = this.expiryDateInput.getText().toString();
         String cvv = this.cvvInput.getText().toString();
 

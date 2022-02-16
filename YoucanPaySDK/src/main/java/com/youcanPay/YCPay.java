@@ -14,6 +14,8 @@ import com.youcanPay.networking.YCPayRetrofitHTTPAdapter;
 import com.youcanPay.services.YCPayApiService;
 import com.youcanPay.services.YCPayCashPlusService;
 import com.youcanPay.services.YCPayConfigService;
+import com.youcanPay.utils.YCPayLocale;
+import com.youcanPay.utils.YCPayStrings;
 
 import static com.youcanPay.utils.YCPayLocale.setLocale;
 
@@ -59,8 +61,11 @@ public class YCPay {
             YCPayCardInformation cardInformation,
             PayCallbackImpl payCallBack
     ) throws YCPayInvalidArgumentException, NullPointerException, YCPayInvalidPaymentMethodException {
-        if (!this.ycPayGetConfigService.accountConfig.isAcceptsCashPlus()) {
-            throw new YCPayInvalidPaymentMethodException("Payment with Credit Card is Invalid for your account");
+        if (!this.ycPayGetConfigService.accountConfig.isAcceptsCreditCards()) {
+            throw new YCPayInvalidPaymentMethodException(YCPayStrings.get(
+                    "payment_with_card_invalid",
+                    YCPayLocale.getLocale()
+            ));
         }
 
         this.apiService.payWithCard(
@@ -77,7 +82,10 @@ public class YCPay {
             CashPlusCallbackImpl cashPlusCallback
     ) throws YCPayInvalidArgumentException, NullPointerException, YCPayInvalidPaymentMethodException {
         if (!this.ycPayGetConfigService.accountConfig.isAcceptsCashPlus()) {
-            throw new YCPayInvalidPaymentMethodException("Payment with CashPlus is Invalid for your account");
+            throw new YCPayInvalidPaymentMethodException(YCPayStrings.get(
+                    "payment_with_cashplus_invalid",
+                    YCPayLocale.getLocale()
+            ));
         }
 
         this.cashPushService.payWithCashPlus(
