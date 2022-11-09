@@ -20,10 +20,9 @@ This integration requires endpoints on your server that talk to the YouCanPay AP
 
 
 ### Install the YouCan Pay SDK :
-<b>Step 1:</b> Add the JitPack repository to your build file
-Add it in your root build.gradle at the end of repositories:
+<b>Step 1:</b> Add the JitPack repository to your root build.gradle :
 
-```gradel
+```gradle
 allprojects {
 	repositories {
 		...
@@ -31,7 +30,7 @@ allprojects {
 	}
 }
 ```
-<b>Step 2:</b> Add the dependency
+<b>Step 2:</b> Then add the dependency.
 ```gradel
 dependencies {
 	implementation 'com.github.NextmediaMa:youcan-pay-android-sdk:v0.4.1'
@@ -39,7 +38,7 @@ dependencies {
  ```
  ### Set up Payment :
  #### Initials YCPay
- The first step is to use YouCanPay SDK you have to creat an instance using ```pub_key``` and ```this``` Activity context 
+ The first step is to initialize YouCanPay SDK by creating an instance using as params ```pub_key``` and ```this``` as a context 
 ```java
 YCPay ycPay = new YCPay(this, "pub_key");    
  ```
