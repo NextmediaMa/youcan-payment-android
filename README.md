@@ -67,7 +67,7 @@ The seller's YouCanPay account public key. This lets us know who is receiving th
 
 ```
 ### Start Payment Using Credit Card:
-If you get ```accountConfig.isAcceptsCreditCards() == true``` it means that you have allowed Credit Card as a payment method.
+When you get ```accountConfig.isAcceptsCreditCards() == true``` it means that the Credit Card payment method is allowed.
 
 #### Initials Card Informtaion
 ```java
