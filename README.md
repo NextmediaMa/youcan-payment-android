@@ -15,7 +15,7 @@ YouCanPay Android SDK makes it quick and easy to build an excellent payment expe
 
 ###  Server-side
 
-This integration requires endpoints on your server that talk to the YouCanPay API. Use our official libraries for access to the YouCanPay API from your server:  the following steps in our [Documentation](https://pay.youcan.shop/docs) will guide you through.
+This integration requires endpoints on your server in order to communicate with YouCanPay API. Use our official libraries for access to the YouCanPay API from your server:  the following steps in our [Documentation](https://pay.youcan.shop/docs) will guide you through.
 
 
 
@@ -38,7 +38,7 @@ dependencies {
  ```
  ### Set up Payment :
  #### Initials YCPay
- The first step is to initialize YouCanPay SDK by creating an instance using as params ```pub_key``` and ```this``` as a context 
+ The first step is to initialize YouCanPay SDK by creating an instance using the following parameters : ```pub_key``` and ```this``` as a context 
 ```java
 YCPay ycPay = new YCPay(this, "pub_key");    
  ```
@@ -48,10 +48,9 @@ The seller's YouCanPay account public key. This lets us know who is receiving th
 
  
  #### Load supported payment methods
- After we initials ```ycPay``` we can load supprted payment methods using: 
+ After we initials ```ycPay``` we can load the supprted payment methods using: 
  ```java
  this.ycPay.getAccountConfigLiveData().observe(this, accountConfig -> {
-            this.binding.loadingProgress.setVisibility(View.GONE);
             if (!accountConfig.isSuccess()) {
              	// load config failed.
                 return;
@@ -60,6 +59,7 @@ The seller's YouCanPay account public key. This lets us know who is receiving th
             if (accountConfig.isAcceptsCashPlus()) {
                 // CashPlus is available
             }
+	
             if (accountConfig.isAcceptsCreditCards()) {
                 // Credit cards are available
             }
@@ -67,7 +67,7 @@ The seller's YouCanPay account public key. This lets us know who is receiving th
 
 ```
 ### Start Payment Using Credit Card:
-If you get ```accountConfig.isAcceptsCreditCards() == true``` that's mean that you have Credit Card as payment method 
+If you get ```accountConfig.isAcceptsCreditCards() == true``` it means that you have allowed Credit Card as a payment method.
 
 #### Initials Card Informtaion
 ```java
@@ -88,10 +88,10 @@ PayCallbackImpl payCallback = new PayCallbackImpl() {
             }
 };
 ```
-The onSuccess is called when the transaction is successful, and you get the final transaction ID that you can submit with your order details. Similarly, onFailure is called with an error occur during the payment, and you get the error message as a parameter to show to customer.
+Once the onSuccess callback invoked it means that the transaction is processeded successfully, a transaction ID will be recieved as a parameter that you can submit with your order details. Similarly, onFailure is called when an error is occurred during the payment, and you get the error message as a parameter to show to customer.
  
-#### Effect your payment with Credit Card:
-You can use ```ycPay.payWithCard```  to effect your payment using in parametrs ```token_id``` is the one generated in the Server-side section
+#### Proceed payment using Credit Card:
+You can use ```ycPay.payWithCard```  to proceed your payment use as parametrs the ```token_id``` it can be generated from your server side and received through an endpoint to the mobile application, to generate a token please refer to the [Tokenization section](https://youcanpay.com/docs#tokenization).
 ```java
 try {
 	this.ycPay.payWithCard("token_id", ycPayCardInformation, payCallback);
@@ -100,10 +100,10 @@ try {
 }
 ```
 ### Start Payment Using CashPlus:
-If you you get ```accountConfig.isAcceptsCashPlus() == true``` that's mean that you have CashPlus as payment method
+If you you get ```accountConfig.isAcceptsCashPlus() == true``` that's mean that you have CashPlus as a payment method
 
 #### Initials CashPlusCallbackImpl
-CashPlusCallbackImpl is the callback that you can get status of your payment if is success or failure.
+CashPlusCallbackImpl is the callback that provides payment status.
 ```java
 CashPlusCallbackImpl cashPlusCallbackImpl = new CashPlusCallbackImpl() {
             @Override
@@ -118,8 +118,8 @@ CashPlusCallbackImpl cashPlusCallbackImpl = new CashPlusCallbackImpl() {
 };
 ```
 
-#### Effect your payment with CashPlus:
-You can use ```ycPay.payWithCashPlus```  to effect your payment using in parametrs ```token_id``` is the one generated in the Server-side section
+#### Proceed payment using CashPlus:
+You can use ```ycPay.payWithCashPlus``` to proceed your payment use as parametrs the ```token_id``` it can be generated from your server side and received through an endpoint to the mobile application, to generate a token please refer to the [Tokenization section](https://youcanpay.com/docs#tokenization).
 ```java
 try {
 	this.ycPay.payWithCashPlus("token_id", cashPlusCallbackImpl);
