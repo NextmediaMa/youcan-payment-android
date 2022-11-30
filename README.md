@@ -33,7 +33,7 @@ allprojects {
 <b>Step 2:</b> Then add the dependency.
 ```gradel
 dependencies {
-	implementation 'com.github.NextmediaMa:youcan-pay-android-sdk:v0.4.1'
+	implementation 'com.github.youcan-shop:youcan-pay-android-sdk:0.5.0'
 }
  ```
  ### Set up Payment :
